@@ -209,11 +209,22 @@ export const Hero: React.FC<HeroProps> = ({ onOpenConsultation }) => {
             >
               <div className="relative rounded-3xl overflow-hidden border border-[#22C55E]/50 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(34,197,94,0.35)] bg-[#121518]">
                 <img
+                  id="hero-nutritionist-img"
                   src={CLOUD_CONFIG.images.heroNutritionist}
                   alt="Nutricionista especialista do método CLOUD com fita métrica e alimentos saudáveis"
                   referrerPolicy="no-referrer"
                   className="w-full h-[460px] sm:h-[540px] object-cover object-center filter contrast-[1.05] saturate-[1.08]"
                   loading="eager"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.dataset.fallback) {
+                      target.dataset.fallback = '1';
+                      target.src = '/images/hero_nutritionist_1789217013580.jpg';
+                    } else if (target.dataset.fallback === '1') {
+                      target.dataset.fallback = '2';
+                      target.src = 'https://images.unsplash.com/photo-1594824813529-6526a64f3316?q=80&w=1200&auto=format&fit=crop';
+                    }
+                  }}
                 />
 
                 {/* Subtle vignette gradient */}
@@ -251,7 +262,17 @@ export const Hero: React.FC<HeroProps> = ({ onOpenConsultation }) => {
                 <img
                   src={CLOUD_CONFIG.images.freshBowl}
                   alt="Prato colorido e nutritivo do método CLOUD"
-                  className="w-12 h-12 rounded-xl object-cover border border-[#22C55E]/40 shadow-[0_0_10px_rgba(34,197,94,0.3)]"
+                  className="w-12 h-12 rounded-xl object-cover border border-[#22C55E]/40 shadow-[0_0_10px_rgba(34,197,94,0.3)] shrink-0"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.dataset.fallback) {
+                      target.dataset.fallback = '1';
+                      target.src = '/images/vibrant_fresh_bowl_1789217718721.jpg';
+                    } else if (target.dataset.fallback === '1') {
+                      target.dataset.fallback = '2';
+                      target.src = 'https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=400&auto=format&fit=crop';
+                    }
+                  }}
                 />
                 <div>
                   <span className="flex items-center gap-1.5 text-[10px] uppercase font-extrabold tracking-wider text-[#22C55E]">

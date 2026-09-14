@@ -111,11 +111,19 @@ export const ExperienceSection: React.FC = () => {
         >
           <div className="flex items-center gap-4">
             <img
+              id="experience-lifestyle-img"
               src={CLOUD_CONFIG.images.lifestyle}
               alt={CLOUD_CONFIG.images.lifestyleAlt}
               referrerPolicy="no-referrer"
               className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover border border-[#22C55E]/40 shadow-[0_0_12px_rgba(34,197,94,0.2)] shrink-0 filter contrast-[1.05]"
               loading="lazy"
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.dataset.fallback) {
+                  target.dataset.fallback = '1';
+                  target.src = '/images/vibrant_fresh_bowl_1789217718721.jpg';
+                }
+              }}
             />
             <div>
               <p className="text-xs font-extrabold uppercase tracking-wider text-[#22C55E] flex items-center gap-1.5">

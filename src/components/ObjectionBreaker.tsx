@@ -60,11 +60,22 @@ export const ObjectionBreaker: React.FC<ObjectionBreakerProps> = ({ onOpenConsul
               
               <div className="relative rounded-t-[130px] rounded-b-2xl overflow-hidden bg-[#0D1013]">
                 <img
+                  id="objection-scale-img"
                   src={scaleTrapImg}
                   alt="Pés amarrados com fita métrica sobre balança simbolizando a prisão das dietas"
                   referrerPolicy="no-referrer"
                   className="w-full h-[380px] sm:h-[440px] object-cover object-center filter contrast-[1.05]"
                   loading="lazy"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.dataset.fallback) {
+                      target.dataset.fallback = '1';
+                      target.src = '/images/scale_trap_1789217025715.jpg';
+                    } else if (target.dataset.fallback === '1') {
+                      target.dataset.fallback = '2';
+                      target.src = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1000&auto=format&fit=crop';
+                    }
+                  }}
                 />
 
                 {/* Bottom Overlay Label */}
@@ -168,11 +179,22 @@ export const ObjectionBreaker: React.FC<ObjectionBreakerProps> = ({ onOpenConsul
               className="group relative rounded-2xl overflow-hidden bg-[#0A0D0F] border border-white/10 hover:border-[#22C55E]/50 transition-all duration-300"
             >
               <img
+                id="food-showcase-bowl-img"
                 src={CLOUD_CONFIG.images.freshBowl}
                 alt="Bowl nutritivo com abacate, sementes e salmão"
                 referrerPolicy="no-referrer"
                 className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (!target.dataset.fallback) {
+                    target.dataset.fallback = '1';
+                    target.src = '/images/vibrant_fresh_bowl_1789217718721.jpg';
+                  } else if (target.dataset.fallback === '1') {
+                    target.dataset.fallback = '2';
+                    target.src = 'https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=800&auto=format&fit=crop';
+                  }
+                }}
               />
               <div className="p-4 bg-gradient-to-t from-[#0B0E11] to-[#0B0E11]/90">
                 <span className="text-[10px] font-bold text-[#22C55E] uppercase tracking-wider block mb-1">
@@ -192,11 +214,22 @@ export const ObjectionBreaker: React.FC<ObjectionBreakerProps> = ({ onOpenConsul
               className="group relative rounded-2xl overflow-hidden bg-[#0A0D0F] border border-white/10 hover:border-[#22C55E]/50 transition-all duration-300"
             >
               <img
+                id="food-showcase-produce-img"
                 src={CLOUD_CONFIG.images.floatingProduce}
                 alt="Frutas cítricas, maçãs verdes e compostos bioativos"
                 referrerPolicy="no-referrer"
                 className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (!target.dataset.fallback) {
+                    target.dataset.fallback = '1';
+                    target.src = '/images/floating_green_produce_1789217730317.jpg';
+                  } else if (target.dataset.fallback === '1') {
+                    target.dataset.fallback = '2';
+                    target.src = 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?q=80&w=800&auto=format&fit=crop';
+                  }
+                }}
               />
               <div className="p-4 bg-gradient-to-t from-[#0B0E11] to-[#0B0E11]/90">
                 <span className="text-[10px] font-bold text-[#22C55E] uppercase tracking-wider block mb-1">
@@ -216,11 +249,22 @@ export const ObjectionBreaker: React.FC<ObjectionBreakerProps> = ({ onOpenConsul
               className="group relative rounded-2xl overflow-hidden bg-[#0A0D0F] border border-white/10 hover:border-[#22C55E]/50 transition-all duration-300 sm:col-span-2 lg:col-span-1"
             >
               <img
+                id="food-showcase-dish-img"
                 src={CLOUD_CONFIG.images.gourmetDish}
                 alt="Toast artesanal com ovos pochê, azeite e ervas frescas"
                 referrerPolicy="no-referrer"
                 className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
                 loading="lazy"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (!target.dataset.fallback) {
+                    target.dataset.fallback = '1';
+                    target.src = '/images/healthy_gourmet_dish_1789217742611.jpg';
+                  } else if (target.dataset.fallback === '1') {
+                    target.dataset.fallback = '2';
+                    target.src = 'https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=800&auto=format&fit=crop';
+                  }
+                }}
               />
               <div className="p-4 bg-gradient-to-t from-[#0B0E11] to-[#0B0E11]/90">
                 <span className="text-[10px] font-bold text-[#22C55E] uppercase tracking-wider block mb-1">

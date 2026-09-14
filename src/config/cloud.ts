@@ -1,4 +1,9 @@
 import { MethodStep, ExperiencePillar, SituationItem, MetricItem, Testimonial, FaqItem } from '../types';
+import heroNutritionistImg from '../assets/images/hero_nutritionist_1789217013580.jpg';
+import scaleTrapImg from '../assets/images/scale_trap_1789217025715.jpg';
+import freshBowlImg from '../assets/images/vibrant_fresh_bowl_1789217718721.jpg';
+import floatingProduceImg from '../assets/images/floating_green_produce_1789217730317.jpg';
+import gourmetDishImg from '../assets/images/healthy_gourmet_dish_1789217742611.jpg';
 
 /**
  * CONFIGURAÇÃO DA MARCA CLOUD
@@ -21,11 +26,11 @@ export const CLOUD_CONFIG = {
 
   // Imagens da landing page correspondentes à referência visual e fotografia de alimentos
   images: {
-    heroNutritionist: '/src/assets/images/hero_nutritionist_1789217013580.jpg',
-    scaleTrap: '/src/assets/images/scale_trap_1789217025715.jpg',
-    freshBowl: '/src/assets/images/vibrant_fresh_bowl_1789217718721.jpg',
-    floatingProduce: '/src/assets/images/floating_green_produce_1789217730317.jpg',
-    gourmetDish: '/src/assets/images/healthy_gourmet_dish_1789217742611.jpg',
+    heroNutritionist: heroNutritionistImg,
+    scaleTrap: scaleTrapImg,
+    freshBowl: freshBowlImg,
+    floatingProduce: floatingProduceImg,
+    gourmetDish: gourmetDishImg,
     hero: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1400&auto=format&fit=crop',
     heroAlt: 'Nutricionista especialista CLOUD',
     lifestyle: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop',
@@ -48,21 +53,21 @@ export const REAL_FOOD_SHOWCASE: FoodShowcaseItem[] = [
     id: 'food-1',
     name: 'Bowls Nutritivos & Coloridos',
     tag: 'Energia & Saciedade',
-    image: '/src/assets/images/vibrant_fresh_bowl_1789217718721.jpg',
+    image: freshBowlImg,
     description: 'Abacate fresco, sementes, espinafre e proteínas de alto valor biológico sem miséria calórica.',
   },
   {
     id: 'food-2',
     name: 'Ingredientes Vivos & Frescos',
     tag: 'Anti-inflamatório',
-    image: '/src/assets/images/floating_green_produce_1789217730317.jpg',
+    image: floatingProduceImg,
     description: 'Frutas cítricas, maçãs verdes crocantes, hortelã e compostos bioativos que desinflamam o corpo.',
   },
   {
     id: 'food-3',
     name: 'Gastronomia Saudável na Prática',
     tag: 'Sabor de Verdade',
-    image: '/src/assets/images/healthy_gourmet_dish_1789217742611.jpg',
+    image: gourmetDishImg,
     description: 'Toast artesanal, ovos pochê, azeite extravirgem e temperos naturais. Prazer real à mesa.',
   },
 ];

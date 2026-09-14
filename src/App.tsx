@@ -13,12 +13,10 @@ import { FaqSection } from './components/FaqSection';
 import { FinalCtaSection } from './components/FinalCtaSection';
 import { Footer } from './components/Footer';
 import { ContactModal } from './components/ContactModal';
-import { GoogleDriveModal } from './components/GoogleDriveModal';
 import { CLOUD_CONFIG } from './config/cloud';
 
 export default function App() {
   const [isConsultationModalOpen, setIsConsultationModalOpen] = useState(false);
-  const [isDriveModalOpen, setIsDriveModalOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   // Scroll Progress Bar for rich scroll feedback
@@ -64,7 +62,6 @@ export default function App() {
       {/* Sticky Luxury Header */}
       <Header
         onOpenConsultation={handleOpenConsultation}
-        onOpenDrive={() => setIsDriveModalOpen(true)}
       />
 
 
@@ -79,7 +76,7 @@ export default function App() {
         <MethodSection />
 
         {/* Section 04: The CLOUD Experience (6 Pillars) */}
-        <ExperienceSection onOpenDrive={() => setIsDriveModalOpen(true)} />
+        <ExperienceSection />
 
         {/* Section 05: For Whom is CLOUD (Conversational Situations + CTA) */}
         <ForWhomSection onOpenConsultation={handleOpenConsultation} />
@@ -147,12 +144,6 @@ export default function App() {
       <ContactModal
         isOpen={isConsultationModalOpen}
         onClose={handleCloseConsultation}
-      />
-
-      {/* Google Drive Workspace File Manager Modal */}
-      <GoogleDriveModal
-        isOpen={isDriveModalOpen}
-        onClose={() => setIsDriveModalOpen(false)}
       />
     </div>
   );

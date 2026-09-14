@@ -235,18 +235,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenConsultation }) => {
                   Dúvidas Frequentes
                 </a>
               </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const driveBtn = document.getElementById('header-drive-button');
-                    if (driveBtn) driveBtn.click();
-                  }}
-                  className="hover:text-[#22C55E] text-[#22C55E] transition-colors inline-block py-0.5 font-semibold text-left cursor-pointer"
-                >
-                  Google Drive (Meus Arquivos)
-                </button>
-              </li>
             </ul>
           </div>
 

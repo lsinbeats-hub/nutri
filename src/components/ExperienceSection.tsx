@@ -9,7 +9,6 @@ import {
   Target 
 } from 'lucide-react';
 import { EXPERIENCE_PILLARS, CLOUD_CONFIG } from '../config/cloud';
-import { HardDrive } from 'lucide-react';
 
 const iconMap = {
   'clipboard-list': ClipboardCheck,
@@ -20,11 +19,7 @@ const iconMap = {
   'target': Target,
 };
 
-interface ExperienceSectionProps {
-  onOpenDrive?: () => void;
-}
-
-export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ onOpenDrive }) => {
+export const ExperienceSection: React.FC = () => {
   return (
     <section id="experiencia" className="py-24 sm:py-32 bg-[#0B0D0F] text-[#F3F4F6] border-t border-white/5 relative">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
@@ -132,20 +127,8 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ onOpenDriv
               </p>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 shrink-0">
-            {onOpenDrive && (
-              <button
-                type="button"
-                onClick={onOpenDrive}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-[#0D1013] hover:bg-[#181C21] border border-[#22C55E]/40 hover:border-[#22C55E] transition-all cursor-pointer shadow-[0_0_15px_rgba(34,197,94,0.15)]"
-              >
-                <HardDrive className="w-4 h-4 text-[#22C55E]" />
-                <span>Acessar Pasta no Drive</span>
-              </button>
-            )}
-            <div className="text-xs text-[#9CA3AF] text-left md:text-right">
-              Disponibilidade contínua • Sem robôs
-            </div>
+          <div className="text-xs text-[#9CA3AF] shrink-0 text-left md:text-right">
+            Disponibilidade contínua • Sem respostas robóticas genéricas
           </div>
         </motion.div>
 

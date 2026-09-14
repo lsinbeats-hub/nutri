@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, HardDrive } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { CLOUD_CONFIG } from '../config/cloud';
 
 interface HeaderProps {
   onOpenConsultation: () => void;
-  onOpenDrive: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onOpenConsultation, onOpenDrive }) => {
+export const Header: React.FC<HeaderProps> = ({ onOpenConsultation }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -79,17 +78,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenConsultation, onOpenDrive 
           ))}
         </nav>
 
-        {/* Header Action Button (High conversion Neon Green CTA + Drive Access) */}
-        <div className="hidden md:flex items-center space-x-3">
-          <button
-            type="button"
-            id="header-drive-button"
-            onClick={onOpenDrive}
-            className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase text-gray-300 hover:text-white bg-[#121518] hover:bg-white/10 border border-white/10 hover:border-[#22C55E]/40 transition-all cursor-pointer"
-          >
-            <HardDrive className="w-3.5 h-3.5 text-[#22C55E]" />
-            <span>Google Drive</span>
-          </button>
+        {/* Header Action Button (High conversion Neon Green CTA) */}
+        <div className="hidden md:flex items-center space-x-4">
           <button
             type="button"
             id="header-cta-button"
@@ -102,21 +92,12 @@ export const Header: React.FC<HeaderProps> = ({ onOpenConsultation, onOpenDrive 
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="flex md:hidden items-center space-x-2">
-          <button
-            type="button"
-            id="mobile-header-drive-cta"
-            onClick={onOpenDrive}
-            className="p-2 rounded-lg text-[#22C55E] bg-[#121518] border border-white/10"
-            title="Google Drive"
-          >
-            <HardDrive className="w-4 h-4" />
-          </button>
+        <div className="flex md:hidden items-center space-x-3">
           <button
             type="button"
             id="mobile-header-quick-cta"
             onClick={onOpenConsultation}
-            className="px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider uppercase text-white bg-[#16A34A] shadow-[0_0_14px_rgba(34,197,94,0.4)]"
+            className="px-3.5 py-1.5 rounded-lg text-[11px] font-bold tracking-wider uppercase text-white bg-[#16A34A] shadow-[0_0_14px_rgba(34,197,94,0.4)]"
           >
             Começar
           </button>
@@ -149,17 +130,6 @@ export const Header: React.FC<HeaderProps> = ({ onOpenConsultation, onOpenDrive 
                 {link.label}
               </a>
             ))}
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenDrive();
-              }}
-              className="flex items-center gap-2 text-base text-[#22C55E] font-medium py-2 border-b border-white/5"
-            >
-              <HardDrive className="w-4 h-4" />
-              <span>Acessar Google Drive</span>
-            </button>
             <div className="pt-4">
               <button
                 type="button"

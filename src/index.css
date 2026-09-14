@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Bebas Neue", sans-serif;
+
+  --color-cloud-canvas: #080A0C;
+  --color-cloud-card: #121518;
+  --color-cloud-surface: #161A1E;
+  --color-cloud-border: #1F262D;
+  --color-cloud-accent: #22C55E;
+  --color-cloud-neon: #22C55E;
+  --color-cloud-neon-bright: #4ADE80;
+  --color-cloud-green: #10B981;
+  --color-cloud-graphite: #F3F4F6;
+  --color-cloud-muted: #9CA3AF;
+  --color-cloud-subtle: #6B7280;
+  --color-cloud-dark: #060709;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    background-color: #080A0C;
+    color: #F3F4F6;
+    font-family: var(--font-sans);
+  }
+}
+
+/* Neon & Glassmorphism Aesthetics */
+.backdrop-glass {
+  background-color: rgba(8, 10, 12, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.backdrop-card-dark {
+  background: linear-gradient(180deg, rgba(22, 26, 30, 0.8) 0%, rgba(14, 17, 20, 0.9) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glow-neon {
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.35), 0 0 60px rgba(34, 197, 94, 0.15);
+}
+
+.glow-neon-subtle {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.25);
+}
+
+.glow-neon-text {
+  text-shadow: 0 0 16px rgba(34, 197, 94, 0.5);
+}
+
+.border-neon {
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  box-shadow: inset 0 0 15px rgba(34, 197, 94, 0.08), 0 0 20px rgba(34, 197, 94, 0.2);
+}
+

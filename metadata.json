@@ -1,0 +1,6 @@
+{
+  "name": "CLOUD — Nutrição Contemporânea",
+  "description": "Landing page de alta conversão e design editorial para a CLOUD, acompanhamento nutricional focado na vida real.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

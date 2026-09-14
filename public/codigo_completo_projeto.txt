@@ -1,0 +1,3007 @@
+================================================================================
+PROJETO MÉTODO CLOUD - NUTRIÇÃO CLÍNICA E COMPORTAMENTAL
+CÓDIGO-FONTE COMPLETO CONSOLIDADO
+================================================================================
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: package.json
+--------------------------------------------------------------------------------
+{
+  "name": "react-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "lucide-react": "^0.546.0",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "vite": "^6.2.3",
+    "express": "^4.21.2",
+    "dotenv": "^17.2.3",
+    "motion": "^12.23.24"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.3",
+    "@types/express": "^4.17.21"
+  }
+}
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: index.html
+--------------------------------------------------------------------------------
+<!doctype html>
+<html lang="pt-BR" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CLOUD — Nutrição Contemporânea</title>
+    <meta name="description" content="Landing page de alta conversão e design editorial para a CLOUD, acompanhamento nutricional focado na vida real." />
+    <meta property="og:title" content="CLOUD — Nutrição Contemporânea" />
+    <meta property="og:description" content="Landing page de alta conversão e design editorial para a CLOUD, acompanhamento nutricional focado na vida real." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Google Fonts: Syne / Plus Jakarta Sans & Bebas Neue for impactful typography matching reference -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-[#080A0C] text-[#F3F4F6] font-sans antialiased selection:bg-[#22C55E] selection:text-[#080A0C] overflow-x-hidden">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: vite.config.ts
+--------------------------------------------------------------------------------
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+import {defineConfig} from 'vite';
+
+export default defineConfig(() => {
+  return {
+    plugins: [react(), tailwindcss()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, '.'),
+      },
+    },
+    server: {
+      // HMR is disabled in AI Studio via DISABLE_HMR env var.
+      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
+      hmr: process.env.DISABLE_HMR !== 'true',
+      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
+      watch: process.env.DISABLE_HMR === 'true' ? null : {},
+    },
+  };
+});
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: tsconfig.json
+--------------------------------------------------------------------------------
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  }
+}
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/main.tsx
+--------------------------------------------------------------------------------
+import {StrictMode} from 'react';
+import {createRoot} from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/index.css
+--------------------------------------------------------------------------------
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Bebas Neue", sans-serif;
+
+  --color-cloud-canvas: #080A0C;
+  --color-cloud-card: #121518;
+  --color-cloud-surface: #161A1E;
+  --color-cloud-border: #1F262D;
+  --color-cloud-accent: #22C55E;
+  --color-cloud-neon: #22C55E;
+  --color-cloud-neon-bright: #4ADE80;
+  --color-cloud-green: #10B981;
+  --color-cloud-graphite: #F3F4F6;
+  --color-cloud-muted: #9CA3AF;
+  --color-cloud-subtle: #6B7280;
+  --color-cloud-dark: #060709;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    background-color: #080A0C;
+    color: #F3F4F6;
+    font-family: var(--font-sans);
+  }
+}
+
+/* Neon & Glassmorphism Aesthetics */
+.backdrop-glass {
+  background-color: rgba(8, 10, 12, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.backdrop-card-dark {
+  background: linear-gradient(180deg, rgba(22, 26, 30, 0.8) 0%, rgba(14, 17, 20, 0.9) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glow-neon {
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.35), 0 0 60px rgba(34, 197, 94, 0.15);
+}
+
+.glow-neon-subtle {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.25);
+}
+
+.glow-neon-text {
+  text-shadow: 0 0 16px rgba(34, 197, 94, 0.5);
+}
+
+.border-neon {
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  box-shadow: inset 0 0 15px rgba(34, 197, 94, 0.08), 0 0 20px rgba(34, 197, 94, 0.2);
+}
+
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/App.tsx
+--------------------------------------------------------------------------------
+import React, { useState, useEffect } from 'react';
+import { motion, useScroll, useSpring, AnimatePresence } from 'motion/react';
+import { MessageCircle, ArrowUp } from 'lucide-react';
+import { Header } from './components/Header';
+import { Hero } from './components/Hero';
+import { ObjectionBreaker } from './components/ObjectionBreaker';
+import { MethodSection } from './components/MethodSection';
+import { ExperienceSection } from './components/ExperienceSection';
+import { ForWhomSection } from './components/ForWhomSection';
+import { ResultsSection } from './components/ResultsSection';
+import { TestimonialsSection } from './components/TestimonialsSection';
+import { FaqSection } from './components/FaqSection';
+import { FinalCtaSection } from './components/FinalCtaSection';
+import { Footer } from './components/Footer';
+import { ContactModal } from './components/ContactModal';
+import { CLOUD_CONFIG } from './config/cloud';
+
+export default function App() {
+  const [isConsultationModalOpen, setIsConsultationModalOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // Scroll Progress Bar for rich scroll feedback
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 28,
+    restDelta: 0.001
+  });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 450) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleOpenConsultation = () => {
+    setIsConsultationModalOpen(true);
+  };
+
+  const handleCloseConsultation = () => {
+    setIsConsultationModalOpen(false);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <div className="min-h-screen bg-[#080A0C] text-[#F3F4F6] selection:bg-[#22C55E] selection:text-[#080A0C] font-sans relative">
+      {/* Top Neon Scroll Progress Indicator */}
+      <motion.div
+        style={{ scaleX }}
+        className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#16A34A] via-[#22C55E] to-[#4ADE80] origin-left z-50 shadow-[0_0_12px_#22C55E]"
+      />
+
+      {/* Sticky Luxury Header */}
+      <Header onOpenConsultation={handleOpenConsultation} />
+
+
+      <main>
+        {/* Hero Section: High Impact Lead Capture & Visual matching Reference */}
+        <Hero onOpenConsultation={handleOpenConsultation} />
+
+        {/* Section 02: Objection Breaker / Scale Trap vs Real Lifestyle matching Reference */}
+        <ObjectionBreaker onOpenConsultation={handleOpenConsultation} />
+
+        {/* Section 03: The CLOUD Method (01 Entender, 02 Estruturar, 03 Acompanhar, 04 Evoluir) */}
+        <MethodSection />
+
+        {/* Section 04: The CLOUD Experience (6 Pillars) */}
+        <ExperienceSection />
+
+        {/* Section 05: For Whom is CLOUD (Conversational Situations + CTA) */}
+        <ForWhomSection onOpenConsultation={handleOpenConsultation} />
+
+        {/* Section 06: Transformation / Holistic Results + Demonstrative KPIs */}
+        <ResultsSection />
+
+        {/* Section 07: Real Testimonials Carousel */}
+        <TestimonialsSection />
+
+        {/* Section 08: Minimalist FAQ Accordion */}
+        <FaqSection />
+
+        {/* Section 09: Final High-Impact Dark Graphite CTA Area */}
+        <FinalCtaSection onOpenConsultation={handleOpenConsultation} />
+      </main>
+
+      {/* Minimalist Editorial Footer */}
+      <Footer onOpenConsultation={handleOpenConsultation} />
+
+      {/* Floating Neon WhatsApp Action */}
+      <a
+        href={CLOUD_CONFIG.contact.whatsappLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Falar com nutricionista no WhatsApp"
+        className="fixed bottom-6 right-6 z-40 group flex items-center gap-3 px-4 py-3 rounded-full bg-[#121518]/90 backdrop-blur-md border border-[#22C55E]/50 shadow-[0_0_25px_rgba(34,197,94,0.35)] hover:border-[#22C55E] hover:shadow-[0_0_35px_rgba(34,197,94,0.6)] transition-all duration-300 active:scale-95"
+      >
+        <div className="relative">
+          <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#22C55E] rounded-full animate-ping" />
+          <div className="w-8 h-8 rounded-full bg-[#22C55E] flex items-center justify-center text-[#080A0C] font-black shadow-[0_0_12px_#22C55E]">
+            <MessageCircle className="w-4 h-4" />
+          </div>
+        </div>
+        <div className="hidden sm:flex flex-col text-left pr-1">
+          <span className="text-[10px] uppercase font-bold text-[#22C55E] tracking-wider leading-tight flex items-center gap-1">
+            Online Agora
+          </span>
+          <span className="text-xs font-bold text-white leading-tight">
+            Tire suas dúvidas
+          </span>
+        </div>
+      </a>
+
+      {/* Floating Back to Top Button on Scroll */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 10 }}
+            transition={{ duration: 0.2 }}
+            type="button"
+            onClick={scrollToTop}
+            aria-label="Voltar ao topo da página"
+            className="fixed bottom-6 left-6 z-40 p-3.5 rounded-full bg-[#121518]/90 backdrop-blur-md border border-white/10 hover:border-[#22C55E]/60 text-white hover:text-[#22C55E] shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300 cursor-pointer active:scale-90"
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+
+      {/* Interactive Consultation / WhatsApp Lead Modal */}
+      <ContactModal
+        isOpen={isConsultationModalOpen}
+        onClose={handleCloseConsultation}
+      />
+    </div>
+  );
+}
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/types.ts
+--------------------------------------------------------------------------------
+export interface MethodStep {
+  number: string;
+  title: string;
+  description: string;
+  details: string;
+}
+
+export interface ExperiencePillar {
+  id: string;
+  title: string;
+  description: string;
+  iconName: 'clipboard-list' | 'sparkles' | 'message-circle' | 'compass' | 'book-open' | 'target';
+}
+
+export interface SituationItem {
+  id: string;
+  quote: string;
+  context: string;
+}
+
+export interface MetricItem {
+  value: string;
+  label: string;
+  description: string;
+  isPlaceholder: boolean;
+}
+
+export interface Testimonial {
+  id: string;
+  quote: string;
+  author: string;
+  role: string;
+  tag: string;
+  isPlaceholder: boolean;
+}
+
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface LeadFormData {
+  name: string;
+  phone: string;
+  routine: string;
+  objective: string;
+  message?: string;
+}
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/vite-env.d.ts
+--------------------------------------------------------------------------------
+/// <reference types="vite/client" />
+
+declare module '*.jpg' {
+  const content: string;
+  export default content;
+}
+
+declare module '*.png' {
+  const content: string;
+  export default content;
+}
+
+declare module '*.webp' {
+  const content: string;
+  export default content;
+}
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/config/cloud.ts
+--------------------------------------------------------------------------------
+import { MethodStep, ExperiencePillar, SituationItem, MetricItem, Testimonial, FaqItem } from '../types';
+
+/**
+ * CONFIGURAÇÃO DA MARCA CLOUD
+ * Links de contato e placeholders facilmente editáveis.
+ */
+export const CLOUD_CONFIG = {
+  brandName: 'CLOUD',
+  tagline: 'Nutrição para a vida real',
+  
+  // Link e número de WhatsApp para conversão direta (substituir pelos dados reais da empresa)
+  contact: {
+    whatsappNumber: '5511999999999', // [EDITÁVEL] Exemplo: 5511999999999
+    whatsappDefaultMessage: 'Olá! Conheci a CLOUD através do site e gostaria de entender como funciona o acompanhamento nutricional.',
+    whatsappLink: 'https://wa.me/5511999999999?text=Ol%C3%A1!%20Conheci%20a%20CLOUD%20pelo%20site%20e%20gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20o%20acompanhamento.',
+    instagramHandle: '@cloud.nutricao',
+    instagramUrl: 'https://instagram.com',
+    email: 'contato@cloudnutricao.com.br',
+    location: 'Atendimento Online (Brasil & Exterior) e Presencial',
+  },
+
+  // Imagens da landing page correspondentes à referência visual e fotografia de alimentos
+  images: {
+    heroNutritionist: '/src/assets/images/hero_nutritionist_1789217013580.jpg',
+    scaleTrap: '/src/assets/images/scale_trap_1789217025715.jpg',
+    freshBowl: '/src/assets/images/vibrant_fresh_bowl_1789217718721.jpg',
+    floatingProduce: '/src/assets/images/floating_green_produce_1789217730317.jpg',
+    gourmetDish: '/src/assets/images/healthy_gourmet_dish_1789217742611.jpg',
+    hero: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1400&auto=format&fit=crop',
+    heroAlt: 'Nutricionista especialista CLOUD',
+    lifestyle: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop',
+    lifestyleAlt: 'Preparação consciente de alimentos frescos e coloridos em ambiente acolhedor',
+    ambience: 'https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?q=80&w=1200&auto=format&fit=crop',
+    ambienceAlt: 'Momento de tranquilidade com alimentação acolhedora',
+  }
+};
+
+export interface FoodShowcaseItem {
+  id: string;
+  name: string;
+  tag: string;
+  image: string;
+  description: string;
+}
+
+export const REAL_FOOD_SHOWCASE: FoodShowcaseItem[] = [
+  {
+    id: 'food-1',
+    name: 'Bowls Nutritivos & Coloridos',
+    tag: 'Energia & Saciedade',
+    image: '/src/assets/images/vibrant_fresh_bowl_1789217718721.jpg',
+    description: 'Abacate fresco, sementes, espinafre e proteínas de alto valor biológico sem miséria calórica.',
+  },
+  {
+    id: 'food-2',
+    name: 'Ingredientes Vivos & Frescos',
+    tag: 'Anti-inflamatório',
+    image: '/src/assets/images/floating_green_produce_1789217730317.jpg',
+    description: 'Frutas cítricas, maçãs verdes crocantes, hortelã e compostos bioativos que desinflamam o corpo.',
+  },
+  {
+    id: 'food-3',
+    name: 'Gastronomia Saudável na Prática',
+    tag: 'Sabor de Verdade',
+    image: '/src/assets/images/healthy_gourmet_dish_1789217742611.jpg',
+    description: 'Toast artesanal, ovos pochê, azeite extravirgem e temperos naturais. Prazer real à mesa.',
+  },
+];
+
+export const METHOD_STEPS: MethodStep[] = [
+  {
+    number: '01',
+    title: 'Entender',
+    description: 'Conhecemos sua rotina, objetivos, preferências e histórico.',
+    details: 'Mapeamos suas refeições habituais, horários de trabalho, momentos de maior fome, relação emocional com a comida e preferências individuais. Nada é imposto sem contexto.',
+  },
+  {
+    number: '02',
+    title: 'Estruturar',
+    description: 'Criamos uma estratégia alimentar personalizada e possível de seguir.',
+    details: 'Construímos opções viáveis para a sua rotina semanal. Cardápio flexível, substituições inteligentes e porcionamentos adequados sem listas de proibições desnecessárias.',
+  },
+  {
+    number: '03',
+    title: 'Acompanhar',
+    description: 'Você não fica sozinho depois da consulta. O acompanhamento faz parte do processo.',
+    details: 'Canal de suporte próximo para dúvidas do dia a dia, viagens, eventos sociais e adaptações pontuais. O sucesso acontece na manutenção diária.',
+  },
+  {
+    number: '04',
+    title: 'Evoluir',
+    description: 'A estratégia é ajustada conforme seu corpo, sua rotina e seus resultados mudam.',
+    details: 'Conforme sua rotina oscila ou novos objetivos surgem, refinamos o plano. Uma nutrição dinâmica que amadurece junto com você.',
+  },
+];
+
+export const EXPERIENCE_PILLARS: ExperiencePillar[] = [
+  {
+    id: 'avaliacao',
+    title: 'Avaliação individual',
+    description: 'Análise profunda dos seus hábitos, saúde metabólica, preferências gastronômicas e estilo de vida.',
+    iconName: 'clipboard-list',
+  },
+  {
+    id: 'estrategia',
+    title: 'Estratégia personalizada',
+    description: 'Um direcionamento prático e sustentável, desenhado sob medida para caber no seu tempo e no seu gosto.',
+    iconName: 'sparkles',
+  },
+  {
+    id: 'acompanhamento',
+    title: 'Acompanhamento contínuo',
+    description: 'Proximidade real entre as consultas para tirar dúvidas, orientar escolhas e manter o ritmo com leveza.',
+    iconName: 'message-circle',
+  },
+  {
+    id: 'ajustes',
+    title: 'Ajustes de rota',
+    description: 'Mudanças de rotina, viagens, imprevistos ou novas metas? O plano se adapta dinamicamente a você.',
+    iconName: 'compass',
+  },
+  {
+    id: 'educacao',
+    title: 'Educação alimentar',
+    description: 'Autonomia para fazer escolhas conscientes em qualquer restaurante, evento social ou supermercado.',
+    iconName: 'book-open',
+  },
+  {
+    id: 'longoprazo',
+    title: 'Foco no longo prazo',
+    description: 'Construção de hábitos consistentes que você consegue manter por anos, sem efeito sanfona ou frustração.',
+    iconName: 'target',
+  },
+];
+
+export const SITUATIONS: SituationItem[] = [
+  {
+    id: 'sit-1',
+    quote: 'Você começa uma dieta e abandona algumas semanas depois.',
+    context: 'Dietas hiper-restritivas esgotam sua força de vontade. A solução não é mais disciplina, é uma estratégia humana.',
+  },
+  {
+    id: 'sit-2',
+    quote: 'Você sabe o que deveria comer, mas não consegue encaixar isso na sua rotina.',
+    context: 'Informação solta na internet não resolve sua quarta-feira corrida. Você precisa de praticidade adaptada ao seu relógio.',
+  },
+  {
+    id: 'sit-3',
+    quote: 'Você quer mudar seu corpo sem viver em função da dieta.',
+    context: 'Sua vida é muito maior que calorias. O objetivo é integrar a alimentação com equilíbrio à sua vida social e profissional.',
+  },
+  {
+    id: 'sit-4',
+    quote: 'Você quer melhorar sua alimentação, mas está cansado de regras impossíveis.',
+    context: 'Cardápios caros, ingredientes exóticos e proibições sem sentido não constroem saúde sustentável.',
+  },
+  {
+    id: 'sit-5',
+    quote: 'Você busca acompanhamento e não apenas uma folha de dieta impressa.',
+    context: 'Uma folha não responde suas dúvidas no meio de um almoço de trabalho. O suporte contínuo é o que gera transformação.',
+  },
+];
+
+export const HOLISTIC_RESULTS = [
+  {
+    title: 'Mais disposição diária',
+    detail: 'Energia estável ao longo do dia, sem a clássica sonolência pós-almoço ou picos de cansaço extremo.',
+  },
+  {
+    title: 'Melhor relação com a comida',
+    detail: 'Fim do sentimento de culpa. Comer com prazer, consciência e sem ansiedade perante reuniões ou viagens.',
+  },
+  {
+    title: 'Mais consistência e paz mental',
+    detail: 'A segurança de seguir um plano que você não sente vontade de abandonar na sexta-feira à noite.',
+  },
+  {
+    title: 'Organização alimentar descomplicada',
+    detail: 'Clareza nas compras, preparos rápidos e decisões fluidas para a sua semana sem sobrecarregar sua mente.',
+  },
+  {
+    title: 'Evolução física sustentável',
+    detail: 'Composição corporal favorável alcançada com respeito à fisiologia e preservação do seu metabolismo.',
+  },
+  {
+    title: 'Clareza sobre o que funciona para você',
+    detail: 'Autonomia completa: entender seu próprio corpo e parar de ser refém da "dieta da moda" do momento.',
+  },
+];
+
+/**
+ * Indicadores quantitativos demonstrativos
+ * ATENÇÃO: Estes dados são placeholders para demonstração de layout e devem ser
+ * substituídos pelos números reais da CLOUD antes da publicação final.
+ */
+export const DEMONSTRATIVE_METRICS: MetricItem[] = [
+  {
+    value: '+500',
+    label: 'clientes acompanhados',
+    description: 'Pessoas que transformaram sua rotina alimentar com o método CLOUD.',
+    isPlaceholder: true, // [PLACEHOLDER DEMONSTRATIVO: substituir por dado real]
+  },
+  {
+    value: '94%',
+    label: 'de adesão ao acompanhamento',
+    description: 'Pacientes que mantêm a constância após os primeiros 3 meses.',
+    isPlaceholder: true, // [PLACEHOLDER DEMONSTRATIVO: substituir por dado real]
+  },
+  {
+    value: '6+ anos',
+    label: 'de experiência clínica',
+    description: 'Foco exclusivo em nutrição comportamental, clínica e preventiva.',
+    isPlaceholder: true, // [PLACEHOLDER DEMONSTRATIVO: substituir por dado real]
+  },
+];
+
+/**
+ * Depoimentos de demonstração
+ * ATENÇÃO: Textos fictícios/demonstrativos elaborados para estruturação visual.
+ * Devem ser substituídos por depoimentos e autorizações de clientes reais da CLOUD antes da publicação.
+ */
+export const DEMO_TESTIMONIALS: Testimonial[] = [
+  {
+    id: 'dep-1',
+    quote: 'Foi a primeira vez que consegui seguir uma estratégia alimentar sem sentir que estava vivendo de dieta. Minha rotina no escritório sempre foi caótica, e pela primeira vez o planejamento se adaptou a mim, não o contrário.',
+    author: 'Mariana Duarte',
+    role: 'Executiva de Finanças • 34 anos',
+    tag: 'Rotina corporativa & constância',
+    isPlaceholder: true, // [PLACEHOLDER: substituir por depoimento real]
+  },
+  {
+    id: 'dep-2',
+    quote: 'Eu já tinha passado por diversas nutricionistas que me entregavam três folhas de papel com alimentos que eu nunca comia. Na CLOUD, o acompanhamento pós-consulta fez toda a diferença para eu não desistir na segunda semana.',
+    author: 'Rafael Mendonça',
+    role: 'Arquiteto • 29 anos',
+    tag: 'Saúde metabólica & acompanhamento',
+    isPlaceholder: true, // [PLACEHOLDER: substituir por depoimento real]
+  },
+  {
+    id: 'dep-3',
+    quote: 'O que mais me impressionou foi a leveza. Não precisei cortar o jantar de fim de semana com meus amigos nem deixar de comer o que gosto. Perdi peso com disposição e, principalmente, em paz com a comida.',
+    author: 'Beatriz Vasconcelos',
+    role: 'Advogada • 41 anos',
+    tag: 'Emagrecimento sem restrições extremas',
+    isPlaceholder: true, // [PLACEHOLDER: substituir por depoimento real]
+  },
+];
+
+export const FAQ_ITEMS: FaqItem[] = [
+  {
+    id: 'faq-1',
+    question: 'Como funciona a primeira consulta?',
+    answer: 'Nossa primeira sessão é um mergulho detalhado na sua vida real: horários, rotina de sono, histórico médico, preferências culinárias, experiências prévias com dietas e suas maiores dificuldades. A partir dessa conversa profunda, traçamos juntos as primeiras diretrizes estratégicas que farão parte do seu plano.',
+  },
+  {
+    id: 'faq-2',
+    question: 'O plano alimentar é totalmente personalizado?',
+    answer: 'Sim, integralmente. Não trabalhamos com modelos pré-fabricados ou dietas de gaveta. Seu plano é calculado e estruturado exclusivamente para as suas necessidades nutricionais, horários de trabalho, facilidade no preparo e paladar pessoal.',
+  },
+  {
+    id: 'faq-3',
+    question: 'Preciso cortar todos os alimentos que gosto?',
+    answer: 'De forma alguma. O princípio fundamental da CLOUD é a sustentabilidade. Alimentos que você ama têm espaço no planejamento através de equilíbrio quantitativo e contexto estratégico. Acreditamos que uma alimentação que te isola socialmente não pode ser considerada saudável.',
+  },
+  {
+    id: 'faq-4',
+    question: 'O acompanhamento acontece depois da consulta?',
+    answer: 'Sim, e este é um dos grandes diferenciais da CLOUD. A consulta é apenas o ponto de partida. Você conta com canal direto de suporte entre os encontros para sanar dúvidas, adaptar refeições em dias atípicos, receber feedback e manter a motivação sem se sentir desamparado.',
+  },
+  {
+    id: 'faq-5',
+    question: 'Quanto tempo leva para perceber resultados?',
+    answer: 'Resultados como melhora na digestão, aumento da disposição física, sono de melhor qualidade e redução do inchaço costumam ser percebidos já nas primeiras semanas. Mudanças sustentáveis de composição corporal e consolidação de hábitos acontecem com consistência e acompanhamento continuado.',
+  },
+  {
+    id: 'faq-6',
+    question: 'A CLOUD atende pessoas com diferentes objetivos?',
+    answer: 'Sim. Atendemos desde quem busca emagrecimento sustentável e melhora na composição corporal, até indivíduos focados em ganho de massa, reeducação alimentar, saúde gastrointestinal, controle de marcadores clínicos ou que simplesmente desejam mais energia e organização no dia a dia.',
+  },
+];
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/Header.tsx
+--------------------------------------------------------------------------------
+import React, { useState, useEffect } from 'react';
+import { Menu, X, ArrowUpRight, MessageCircle } from 'lucide-react';
+import { CLOUD_CONFIG } from '../config/cloud';
+
+interface HeaderProps {
+  onOpenConsultation: () => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({ onOpenConsultation }) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 24) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { label: 'O Método', href: '#metodo' },
+    { label: 'A Experiência', href: '#experiencia' },
+    { label: 'Para Quem É', href: '#para-quem' },
+    { label: 'Depoimentos', href: '#depoimentos' },
+    { label: 'Dúvidas', href: '#faq' },
+  ];
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <header
+      id="main-header"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'py-3 bg-[#0B0D0F]/90 backdrop-blur-md border-b border-white/10 shadow-[0_4px_25px_rgba(0,0,0,0.5)]'
+          : 'py-5 bg-transparent'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between">
+        
+        {/* Brand Logo matching Reference with Neon Accent */}
+        <a
+          href="#"
+          id="brand-logo"
+          className="group flex items-center gap-2.5 tracking-[0.25em] text-white font-extrabold text-xl sm:text-2xl transition-opacity hover:opacity-90"
+          aria-label="CLOUD Home"
+        >
+          <span>CLOUD</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-[#22C55E] shadow-[0_0_14px_#22C55E]" />
+        </a>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-8" aria-label="Navegação principal">
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              id={`nav-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#9CA3AF] hover:text-white transition-colors relative py-1 group"
+            >
+              {link.label}
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#22C55E] shadow-[0_0_8px_#22C55E] transition-all duration-200 group-hover:w-full" />
+            </a>
+          ))}
+        </nav>
+
+        {/* Header Action Button (High conversion Neon Green CTA) */}
+        <div className="hidden md:flex items-center space-x-4">
+          <button
+            type="button"
+            id="header-cta-button"
+            onClick={onOpenConsultation}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase text-white bg-[#16A34A] hover:bg-[#22C55E] active:scale-[0.98] shadow-[0_0_20px_rgba(34,197,94,0.35)] hover:shadow-[0_0_28px_rgba(34,197,94,0.6)] transition-all duration-300 cursor-pointer"
+          >
+            <span>QUERO COMEÇAR</span>
+            <ArrowUpRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="flex md:hidden items-center space-x-3">
+          <button
+            type="button"
+            id="mobile-header-quick-cta"
+            onClick={onOpenConsultation}
+            className="px-3.5 py-1.5 rounded-lg text-[11px] font-bold tracking-wider uppercase text-white bg-[#16A34A] shadow-[0_0_14px_rgba(34,197,94,0.4)]"
+          >
+            Começar
+          </button>
+          <button
+            type="button"
+            id="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-white hover:text-[#22C55E] focus:outline-none"
+            aria-label="Abrir menu"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div
+          id="mobile-menu-drawer"
+          className="md:hidden px-6 pt-4 pb-8 bg-[#0E1114] border-b border-white/10 shadow-2xl animate-fadeIn"
+        >
+          <div className="flex flex-col space-y-4 pt-2">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="text-base text-white font-medium py-2 border-b border-white/5"
+              >
+                {link.label}
+              </a>
+            ))}
+            <div className="pt-4">
+              <button
+                type="button"
+                id="mobile-menu-cta"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenConsultation();
+                }}
+                className="w-full flex items-center justify-center gap-2 py-4 px-5 rounded-xl text-xs font-bold tracking-wider uppercase text-white bg-[#16A34A] shadow-[0_4px_16px_rgba(22,163,74,0.4)] active:bg-[#15803D]"
+              >
+                <span>QUERO COMEÇAR MINHA TRANSFORMAÇÃO</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/Hero.tsx
+--------------------------------------------------------------------------------
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
+import { ArrowRight, CheckCircle2, Instagram, MessageCircle, ShieldCheck, Sparkles, User, Mail, Phone } from 'lucide-react';
+import { CLOUD_CONFIG } from '../config/cloud';
+
+interface HeroProps {
+  onOpenConsultation: () => void;
+}
+
+export const Hero: React.FC<HeroProps> = ({ onOpenConsultation }) => {
+  const [name, setName] = useState('');
+  const [contact, setContact] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleHeroSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const message = encodeURIComponent(
+      `Olá! Vim pelo site da CLOUD e quero transformar minha alimentação.\nNome: ${name || 'Interessado(a)'}\nContato: ${contact || 'Não informado'}`
+    );
+
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitted(true);
+      const waUrl = `https://wa.me/${CLOUD_CONFIG.contact.whatsappNumber}?text=${message}`;
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    }, 900);
+  };
+
+  return (
+    <section
+      id="hero-section"
+      className="relative min-h-screen pt-28 pb-20 md:pt-36 md:pb-28 flex items-center bg-[#0B0D0F] text-[#F3F4F6] overflow-hidden"
+    >
+      {/* Background Atmosphere Lights with Neon Green identity */}
+      <div 
+        aria-hidden="true" 
+        className="pointer-events-none absolute top-12 right-[5%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#22C55E]/20 via-[#10B981]/15 to-transparent blur-[140px] -z-0" 
+      />
+      <div 
+        aria-hidden="true" 
+        className="pointer-events-none absolute -bottom-20 left-[-10%] w-[550px] h-[550px] rounded-full bg-[#22C55E]/10 blur-[150px] -z-0" 
+      />
+
+      {/* Floating Ambient Produce Elements with Neon Glow */}
+      <motion.div
+        animate={{ y: [0, -18, 0], rotate: [0, 8, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+        className="hidden md:block pointer-events-none absolute top-24 left-[44%] w-12 h-12 rounded-full bg-[#22C55E]/40 blur-[2px] shadow-[0_0_25px_#22C55E] -z-0 opacity-70"
+      />
+      <motion.div
+        animate={{ y: [0, 16, 0], rotate: [0, -12, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        className="hidden md:block pointer-events-none absolute bottom-32 left-[48%] w-10 h-10 rounded-full bg-[#10B981]/40 blur-[2px] shadow-[0_0_20px_#10B981] -z-0 opacity-80"
+      />
+
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 w-full relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          {/* Left Column: Direct-Response Offer & Direct Lead Capture Form */}
+          <div className="lg:col-span-6 flex flex-col items-start text-left z-20">
+            
+            {/* Top Brand Tag / Logo badge with Neon Accent */}
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex items-center gap-3 mb-6"
+            >
+              <div className="px-3.5 py-1.5 rounded-lg bg-[#121518] border border-[#22C55E]/40 flex items-center gap-2.5 shadow-[0_0_15px_rgba(34,197,94,0.15)]">
+                <span className="font-extrabold tracking-[0.25em] text-white text-base font-sans">
+                  CLOUD
+                </span>
+                <span className="text-[10px] uppercase font-extrabold tracking-widest text-[#22C55E] px-2 py-0.5 rounded bg-[#22C55E]/15 border border-[#22C55E]/30">
+                  NUTRIÇÃO REAL
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Neon Green Headline (Replacing orange with high-energy nutrition green) */}
+            <motion.h1
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              id="hero-headline"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-[#22C55E] drop-shadow-[0_0_25px_rgba(34,197,94,0.35)] leading-[1.18] mb-4"
+            >
+              CHEGA DE FAZER DIETA NA SUA VIDA.{' '}
+              <span className="block text-white mt-1 text-2xl sm:text-3xl md:text-4xl">
+                DESCUBRA A FORMA DE TER UMA ALIMENTAÇÃO SAUDÁVEL E SABOROSA.
+              </span>
+            </motion.h1>
+
+            {/* Supporting Copy */}
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              id="hero-subtitle"
+              className="text-sm sm:text-base text-[#D1D5DB] leading-[1.65] max-w-[50ch] mb-8 font-normal"
+            >
+              Saia de uma vez por todas desse ciclo de perder e ganhar peso. Comece hoje um estilo de vida
+              <strong className="text-white font-semibold"> acessível para a sua rotina real</strong>, com comida de verdade, sem passar fome e sem cortar tudo o que você ama.
+            </motion.p>
+
+            {/* Lead Capture Form directly in the Hero */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="w-full max-w-md"
+            >
+              <div className="p-5 sm:p-6 rounded-2xl bg-[#121518]/95 backdrop-blur-md border border-[#22C55E]/30 shadow-[0_12px_40px_rgba(0,0,0,0.6),0_0_20px_rgba(34,197,94,0.15)]">
+                <form onSubmit={handleHeroSubmit} className="space-y-3.5">
+                  {/* Name Input */}
+                  <div className="relative">
+                    <User className="w-4 h-4 text-[#9CA3AF] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                      type="text"
+                      required
+                      placeholder="Seu nome completo"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-[#080A0C] border border-[#22C55E]/20 text-sm text-white placeholder-[#6B7280] focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E] transition-all"
+                    />
+                  </div>
+
+                  {/* Contact / WhatsApp Input */}
+                  <div className="relative">
+                    <Phone className="w-4 h-4 text-[#9CA3AF] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                      type="tel"
+                      required
+                      placeholder="WhatsApp (ex: 11 99999-9999)"
+                      value={contact}
+                      onChange={(e) => setContact(e.target.value)}
+                      className="w-full pl-11 pr-4 py-3.5 rounded-xl bg-[#080A0C] border border-[#22C55E]/20 text-sm text-white placeholder-[#6B7280] focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E] transition-all"
+                    />
+                  </div>
+
+                  {/* Big Vibrant Neon Green CTA Button */}
+                  <button
+                    type="submit"
+                    id="hero-primary-cta"
+                    disabled={isSubmitting}
+                    className="w-full group relative flex items-center justify-center gap-2 py-4 px-6 rounded-xl font-extrabold text-xs sm:text-sm tracking-wider uppercase text-white bg-[#16A34A] hover:bg-[#22C55E] active:scale-[0.98] shadow-[0_0_25px_rgba(34,197,94,0.4)] hover:shadow-[0_0_35px_rgba(34,197,94,0.7)] transition-all duration-300 cursor-pointer"
+                  >
+                    {isSubmitting ? (
+                      <span className="inline-flex items-center gap-2">
+                        <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Iniciando...
+                      </span>
+                    ) : (
+                      <>
+                        <span>QUERO APRENDER A EMAGRECER DE VERDADE</span>
+                        <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                {/* Sub-form Social Proof with Neon indicator */}
+                <div className="mt-4 pt-3.5 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-[#9CA3AF]">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#22C55E] shadow-[0_0_10px_#22C55E] animate-pulse" />
+                    <span className="text-white font-medium">Vagas abertas para esta semana</span>
+                  </div>
+
+                  <a
+                    href={CLOUD_CONFIG.contact.instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[#D1D5DB] hover:text-[#22C55E] transition-colors"
+                  >
+                    <Instagram className="w-3.5 h-3.5 text-[#22C55E]" />
+                    <span>{CLOUD_CONFIG.contact.instagramHandle}</span>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+
+          {/* Right Column: Hero Figure with Giant Background Typography "CLOUD" + Food Elements */}
+          <div className="lg:col-span-6 relative flex items-center justify-center">
+            
+            {/* Giant Background Typography "CLOUD" */}
+            <div 
+              aria-hidden="true" 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[90px] sm:text-[140px] md:text-[180px] lg:text-[200px] font-black tracking-tighter text-[#22C55E]/[0.08] select-none pointer-events-none z-0 uppercase font-display leading-none whitespace-nowrap"
+            >
+              CLOUD
+            </div>
+
+            {/* Glowing amplified neon green halo behind figure */}
+            <div 
+              aria-hidden="true" 
+              className="absolute w-[440px] h-[440px] sm:w-[580px] sm:h-[580px] rounded-full bg-gradient-to-tr from-[#22C55E]/40 via-[#10B981]/35 to-[#4ADE80]/20 blur-[110px] -z-0 shadow-[0_0_120px_rgba(34,197,94,0.45)]"
+            />
+
+            {/* Nutritionist Photo Card with Neon Green Frame */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.25 }}
+              className="relative z-10 w-full max-w-[440px] sm:max-w-[480px]"
+            >
+              <div className="relative rounded-3xl overflow-hidden border border-[#22C55E]/50 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(34,197,94,0.35)] bg-[#121518]">
+                <img
+                  src={CLOUD_CONFIG.images.heroNutritionist}
+                  alt="Nutricionista especialista do método CLOUD com fita métrica e alimentos saudáveis"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-[460px] sm:h-[540px] object-cover object-center filter contrast-[1.05] saturate-[1.08]"
+                  loading="eager"
+                />
+
+                {/* Subtle vignette gradient */}
+                <div 
+                  aria-hidden="true" 
+                  className="absolute inset-0 bg-gradient-to-t from-[#080A0C] via-transparent to-transparent opacity-75" 
+                />
+
+                {/* Badge Overlay */}
+                <div className="absolute bottom-5 left-5 right-5 p-4 rounded-xl bg-[#0B0E11]/90 backdrop-blur-md border border-[#22C55E]/30 shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#22C55E] flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-[#22C55E] shadow-[0_0_8px_#22C55E]" />
+                        Acompanhamento 100% Individual
+                      </p>
+                      <p className="text-xs sm:text-sm font-semibold text-white mt-0.5">
+                        Sem dietas genéricas de gaveta. Feito para você.
+                      </p>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-[#22C55E]/20 border border-[#22C55E]/40 flex items-center justify-center shrink-0 text-[#22C55E] shadow-[0_0_12px_rgba(34,197,94,0.4)]">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating Real Food Preview Tag */}
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+                style={{ marginTop: -28, marginBottom: -14 }}
+                className="absolute -bottom-6 -left-4 sm:-left-8 z-30 flex items-center gap-3 p-2.5 pr-4 rounded-2xl bg-[#0D1013]/95 backdrop-blur-md border border-[#22C55E]/50 shadow-[0_12px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(34,197,94,0.25)] -mt-7 -mb-3.5"
+              >
+                <img
+                  src={CLOUD_CONFIG.images.freshBowl}
+                  alt="Prato colorido e nutritivo do método CLOUD"
+                  className="w-12 h-12 rounded-xl object-cover border border-[#22C55E]/40 shadow-[0_0_10px_rgba(34,197,94,0.3)]"
+                />
+                <div>
+                  <span className="flex items-center gap-1.5 text-[10px] uppercase font-extrabold tracking-wider text-[#22C55E]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] shadow-[0_0_6px_#22C55E]" />
+                    Alimentação Viva
+                  </span>
+                  <p className="text-xs font-bold text-white leading-tight">
+                    Pratos Gostosos & Nutritivos
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/ObjectionBreaker.tsx
+--------------------------------------------------------------------------------
+import React from 'react';
+import { motion } from 'motion/react';
+import { ArrowRight, Sparkles } from 'lucide-react';
+import { CLOUD_CONFIG } from '../config/cloud';
+import scaleTrapImg from '../assets/images/scale_trap_1789217025715.jpg';
+
+interface ObjectionBreakerProps {
+  onOpenConsultation: () => void;
+}
+
+export const ObjectionBreaker: React.FC<ObjectionBreakerProps> = ({ onOpenConsultation }) => {
+  return (
+    <section
+      id="quebrar-objecao"
+      className="py-24 sm:py-32 bg-[#0B0D0F] text-[#F3F4F6] relative overflow-hidden border-t border-white/5"
+    >
+      {/* Neon Green Ambient Glow */}
+      <div 
+        aria-hidden="true" 
+        className="pointer-events-none absolute top-1/2 left-1/4 -translate-y-1/2 w-[550px] h-[550px] bg-[#22C55E]/10 rounded-full blur-[150px] -z-0" 
+      />
+
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 relative z-10">
+        
+        {/* Centered Top Headlines matching Reference with Neon Green */}
+        <div className="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-2xl sm:text-3xl md:text-4xl font-extrabold uppercase tracking-tight text-[#22C55E] drop-shadow-[0_0_20px_rgba(34,197,94,0.3)] leading-tight mb-3"
+          >
+            NÃO EXISTE UMA FÓRMULA MÁGICA PARA PERDER PESO
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-lg sm:text-xl font-bold uppercase tracking-wide text-white"
+          >
+            MAS SIM A FORMA CORRETA DE COMEÇAR UM NOVO ESTILO DE VIDA
+          </motion.p>
+        </div>
+
+        {/* Two-Column Story Breakdown matching Reference */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center mb-16">
+          
+          {/* Left Column: Arched Neon Green Frame with Scale & "Help!" stickers */}
+          <motion.div
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="lg:col-span-5 relative flex justify-center"
+          >
+            {/* Arched Container with Neon Green Border & Glow */}
+            <div className="relative w-full max-w-[380px] sm:max-w-[420px] rounded-t-[140px] rounded-b-3xl bg-gradient-to-b from-[#22C55E] via-[#10B981] to-[#065F46] p-3.5 sm:p-4 shadow-[0_0_40px_rgba(34,197,94,0.25)] border border-[#22C55E]/60">
+              
+              <div className="relative rounded-t-[130px] rounded-b-2xl overflow-hidden bg-[#0D1013]">
+                <img
+                  src={scaleTrapImg}
+                  alt="Pés amarrados com fita métrica sobre balança simbolizando a prisão das dietas"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-[380px] sm:h-[440px] object-cover object-center filter contrast-[1.05]"
+                  loading="lazy"
+                />
+
+                {/* Bottom Overlay Label */}
+                <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 to-transparent text-center">
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-white">
+                    A PRISÃO DO EFEITO SANFONA
+                  </p>
+                  <p className="text-[11px] text-[#D1D5DB] mt-0.5">
+                    O ciclo de cortar tudo, sofrer e desistir termina aqui.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </motion.div>
+
+          {/* Right Column: Empathetic & Personal Narrative matching Reference text */}
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="lg:col-span-7 flex flex-col items-start"
+          >
+            {/* White Title matching reference */}
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-6">
+              É exatamente isso que eu vou te ensinar
+            </h3>
+
+            {/* Narrative Paragraphs */}
+            <div className="space-y-4 text-sm sm:text-base text-[#D1D5DB] leading-[1.7] max-w-[62ch]">
+              <p>
+                Talvez você já tenha tentado dezenas de dietas da moda: cortar carboidrato, jejuar até desmaiar de dor de cabeça, ou seguir uma folha de papel rígida que não combinava com o seu almoço de trabalho.
+              </p>
+              
+              <p>
+                Durante muito tempo, você foi levado(a) a acreditar que a culpa era da sua falta de disciplina. Mas a verdade é simples: <strong className="text-white font-semibold">uma estratégia que te faz sofrer e te isola do mundo social não foi feita para durar.</strong>
+              </p>
+
+              <p>
+                A CLOUD nasceu para acabar com essa relação tóxica com a balança. Você não precisa passar fome, cortar o arroz, nem dizer não para o jantar em família no sábado.
+              </p>
+            </div>
+
+            {/* Final Punchline quote with neon green styling */}
+            <div className="mt-8 p-5 rounded-2xl bg-[#121518] border border-[#22C55E]/40 shadow-[0_0_20px_rgba(34,197,94,0.12)] w-full max-w-xl">
+              <p className="text-base font-bold text-[#22C55E]">
+                "Se eu e centenas de alunos conseguimos quebrar esse ciclo, você também vai conseguir!"
+              </p>
+              <p className="text-xs text-[#9CA3AF] mt-1">
+                Uma metodologia humana, acolhedora e baseada na ciência do comportamento alimentar.
+              </p>
+            </div>
+
+            {/* CTA Button with Neon Glow */}
+            <div className="mt-8">
+              <button
+                type="button"
+                onClick={onOpenConsultation}
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-extrabold text-xs sm:text-sm tracking-wider uppercase text-white bg-[#16A34A] hover:bg-[#22C55E] active:scale-[0.98] shadow-[0_0_25px_rgba(34,197,94,0.4)] hover:shadow-[0_0_35px_rgba(34,197,94,0.7)] transition-all duration-300 cursor-pointer"
+              >
+                <span>QUERO QUEBRAR ESSE CICLO AGORA</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
+          </motion.div>
+
+        </div>
+
+        {/* Real Food Showcase Ribbon: Adding more vibrant food photography directly */}
+        <motion.div
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+          className="rounded-3xl bg-[#121518] border border-[#22C55E]/30 p-6 sm:p-8 shadow-[0_15px_40px_rgba(0,0,0,0.6)]"
+        >
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div>
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs font-extrabold tracking-widest uppercase shadow-[0_0_12px_rgba(34,197,94,0.15)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] shadow-[0_0_6px_#22C55E]" />
+                Nutrição de Verdade
+              </span>
+              <h4 className="text-xl sm:text-2xl font-extrabold text-white mt-2 uppercase tracking-tight">
+                O que você come na prática: <span className="text-[#22C55E] drop-shadow-[0_0_15px_rgba(34,197,94,0.3)]">comida com sabor e cor</span>
+              </h4>
+            </div>
+            <p className="text-xs sm:text-sm text-[#9CA3AF] max-w-md">
+              Chega de frango seco com batata doce sem tempero. O plano alimentar inclui receitas práticas, alimentos vivos e refeições apetitosas.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {/* Food Card 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="group relative rounded-2xl overflow-hidden bg-[#0A0D0F] border border-white/10 hover:border-[#22C55E]/50 transition-all duration-300"
+            >
+              <img
+                src={CLOUD_CONFIG.images.freshBowl}
+                alt="Bowl nutritivo com abacate, sementes e salmão"
+                referrerPolicy="no-referrer"
+                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+              <div className="p-4 bg-gradient-to-t from-[#0B0E11] to-[#0B0E11]/90">
+                <span className="text-[10px] font-bold text-[#22C55E] uppercase tracking-wider block mb-1">
+                  Saciedade & Energia
+                </span>
+                <p className="text-sm font-bold text-white">Bowls Completos e Balanceados</p>
+                <p className="text-xs text-[#9CA3AF] mt-1">Gorduras boas, fibras e micronutrientes sem monotonia.</p>
+              </div>
+            </motion.div>
+
+            {/* Food Card 2 */}
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="group relative rounded-2xl overflow-hidden bg-[#0A0D0F] border border-white/10 hover:border-[#22C55E]/50 transition-all duration-300"
+            >
+              <img
+                src={CLOUD_CONFIG.images.floatingProduce}
+                alt="Frutas cítricas, maçãs verdes e compostos bioativos"
+                referrerPolicy="no-referrer"
+                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+              <div className="p-4 bg-gradient-to-t from-[#0B0E11] to-[#0B0E11]/90">
+                <span className="text-[10px] font-bold text-[#22C55E] uppercase tracking-wider block mb-1">
+                  Poder Anti-inflamatório
+                </span>
+                <p className="text-sm font-bold text-white">Ingredientes Vivos & Frescos</p>
+                <p className="text-xs text-[#9CA3AF] mt-1">Cores vivas que melhoram a digestão, o intestino e a disposição.</p>
+              </div>
+            </motion.div>
+
+            {/* Food Card 3 */}
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="group relative rounded-2xl overflow-hidden bg-[#0A0D0F] border border-white/10 hover:border-[#22C55E]/50 transition-all duration-300 sm:col-span-2 lg:col-span-1"
+            >
+              <img
+                src={CLOUD_CONFIG.images.gourmetDish}
+                alt="Toast artesanal com ovos pochê, azeite e ervas frescas"
+                referrerPolicy="no-referrer"
+                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+              <div className="p-4 bg-gradient-to-t from-[#0B0E11] to-[#0B0E11]/90">
+                <span className="text-[10px] font-bold text-[#22C55E] uppercase tracking-wider block mb-1">
+                  Gastronomia Saudável
+                </span>
+                <p className="text-sm font-bold text-white">Pratos Rápidos & Saborosos</p>
+                <p className="text-xs text-[#9CA3AF] mt-1">Cafés da manhã e lanches que dão água na boca na sua rotina.</p>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+      </div>
+    </section>
+  );
+};
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/MethodSection.tsx
+--------------------------------------------------------------------------------
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
+import { Sparkles, ArrowRight } from 'lucide-react';
+import { METHOD_STEPS } from '../config/cloud';
+
+export const MethodSection: React.FC = () => {
+  const [activeStep, setActiveStep] = useState<number>(0);
+
+  return (
+    <section id="metodo" className="py-24 sm:py-32 bg-[#0E1114] text-[#F3F4F6] relative overflow-hidden border-t border-white/5">
+      {/* Subtle Neon Green Background Glow */}
+      <div 
+        aria-hidden="true" 
+        className="pointer-events-none absolute top-1/3 right-[-10%] w-[500px] h-[500px] bg-[#22C55E]/5 rounded-full blur-[140px] -z-0" 
+      />
+
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
+        
+        {/* Section Header */}
+        <div className="max-w-3xl mb-16 sm:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs font-bold tracking-widest uppercase mb-4 shadow-[0_0_12px_rgba(34,197,94,0.15)]"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>O Método CLOUD</span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.08 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight"
+          >
+            QUATRO ETAPAS PARA UMA NUTRIÇÃO{' '}
+            <span className="text-[#22C55E] drop-shadow-[0_0_20px_rgba(34,197,94,0.3)]">POSSÍVEL NA VIDA REAL.</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.16 }}
+            className="text-sm sm:text-base text-[#9CA3AF] mt-4 leading-relaxed max-w-2xl"
+          >
+            Esqueça o roteiro de regras inatingíveis. O acompanhamento se desenrola em um fluxo contínuo
+            e adaptativo, respeitando a forma como você verdadeiramente vive.
+          </motion.p>
+        </div>
+
+        {/* Steps Grid with Animated Scroll Reveal */}
+        <div className="relative z-10">
+          {/* Subtle Desktop Connecting Guide Line */}
+          <div className="hidden lg:block absolute top-[52px] left-12 right-12 h-[2px] bg-gradient-to-r from-[#22C55E]/10 via-[#22C55E]/30 to-[#22C55E]/10 -z-0" />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+            {METHOD_STEPS.map((step, idx) => {
+              const isSelected = activeStep === idx;
+              return (
+                <motion.div
+                  key={step.number}
+                  initial={{ opacity: 0, y: 40, scale: 0.96 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ 
+                    duration: 0.55, 
+                    delay: idx * 0.12,
+                    ease: [0.21, 0.47, 0.32, 0.98] 
+                  }}
+                  onMouseEnter={() => setActiveStep(idx)}
+                  className={`group relative flex flex-col p-6 sm:p-7 rounded-2xl transition-all duration-300 cursor-pointer border ${
+                    isSelected
+                      ? 'bg-[#12161A] border-[#22C55E] shadow-[0_0_30px_rgba(34,197,94,0.2)] -translate-y-2'
+                      : 'bg-[#0E1114] border-white/5 hover:border-white/20 hover:-translate-y-1'
+                  }`}
+                >
+                  {/* Step Big Number */}
+                  <div className="flex items-center justify-between mb-8">
+                    <span
+                      className={`text-4xl sm:text-5xl font-extrabold tracking-tight transition-colors duration-300 font-display ${
+                        isSelected ? 'text-[#22C55E] drop-shadow-[0_0_12px_rgba(34,197,94,0.4)]' : 'text-white/20 group-hover:text-white/40'
+                      }`}
+                    >
+                      {step.number}
+                    </span>
+
+                    {/* Indicator Dot with Neon Glow */}
+                    <div
+                      className={`w-3.5 h-3.5 rounded-full transition-all duration-300 ${
+                        isSelected
+                          ? 'bg-[#22C55E] shadow-[0_0_14px_#22C55E] scale-125'
+                          : 'bg-white/10 group-hover:bg-[#22C55E]/40'
+                      }`}
+                    />
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-xl font-bold tracking-tight text-white mb-2 group-hover:text-[#22C55E] transition-colors">
+                    {step.title}
+                  </h3>
+
+                  {/* Main Concise Description */}
+                  <p className="text-sm font-medium text-[#D1D5DB] leading-relaxed mb-4">
+                    {step.description}
+                  </p>
+
+                  {/* Extended Context Detail */}
+                  <p className="text-xs text-[#9CA3AF] leading-relaxed mt-auto pt-3 border-t border-white/10">
+                    {step.details}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/ExperienceSection.tsx
+--------------------------------------------------------------------------------
+import React from 'react';
+import { motion } from 'motion/react';
+import { 
+  ClipboardCheck, 
+  Sparkles, 
+  MessageSquareHeart, 
+  Compass, 
+  BookOpenCheck, 
+  Target 
+} from 'lucide-react';
+import { EXPERIENCE_PILLARS, CLOUD_CONFIG } from '../config/cloud';
+
+const iconMap = {
+  'clipboard-list': ClipboardCheck,
+  'sparkles': Sparkles,
+  'message-circle': MessageSquareHeart,
+  'compass': Compass,
+  'book-open': BookOpenCheck,
+  'target': Target,
+};
+
+export const ExperienceSection: React.FC = () => {
+  return (
+    <section id="experiencia" className="py-24 sm:py-32 bg-[#0B0D0F] text-[#F3F4F6] border-t border-white/5 relative">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
+        
+        {/* Section Header */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-end mb-16 sm:mb-20">
+          <div className="lg:col-span-8">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs font-bold tracking-widest uppercase mb-4 shadow-[0_0_12px_rgba(34,197,94,0.15)]"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>A Experiência CLOUD</span>
+            </motion.div>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.08 }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight"
+            >
+              MUITO MAIS QUE UMA FOLHA DE DIETA.{' '}
+              <span className="text-[#22C55E] drop-shadow-[0_0_20px_rgba(34,197,94,0.3)] block mt-1">
+                UMA PARCERIA DIÁRIA DE RESULTADOS.
+              </span>
+            </motion.h2>
+          </div>
+
+          <div className="lg:col-span-4">
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.16 }}
+              className="text-sm sm:text-base text-[#9CA3AF] leading-relaxed"
+            >
+              A consulta é somente o primeiro dia. Você conta com suporte contínuo para nunca mais se sentir
+              desamparado(a) no meio de um jantar, viagem ou semana atípica.
+            </motion.p>
+          </div>
+        </div>
+
+        {/* 6 Pillars Grid with Staggered Scroll Animation */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {EXPERIENCE_PILLARS.map((pillar, idx) => {
+            const IconComponent = iconMap[pillar.iconName];
+
+            return (
+              <motion.div
+                key={pillar.id}
+                initial={{ opacity: 0, y: 32, scale: 0.96 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ 
+                  duration: 0.5, 
+                  delay: idx * 0.08,
+                  ease: [0.21, 0.47, 0.32, 0.98] 
+                }}
+                whileHover={{ y: -6 }}
+                className="group p-7 sm:p-8 rounded-2xl bg-[#121518] border border-white/5 hover:border-[#22C55E]/50 hover:shadow-[0_0_30px_rgba(34,197,94,0.18)] transition-colors duration-300 flex flex-col"
+              >
+                {/* Minimalist Icon Container with Neon hover */}
+                <div className="w-12 h-12 rounded-xl bg-[#181D22] border border-white/10 flex items-center justify-center text-[#22C55E] group-hover:bg-[#22C55E] group-hover:text-[#080A0C] group-hover:shadow-[0_0_20px_#22C55E] transition-all duration-300 mb-6">
+                  <IconComponent className="w-6 h-6 stroke-[2]" />
+                </div>
+
+                <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight mb-2.5 group-hover:text-[#22C55E] transition-colors">
+                  {pillar.title}
+                </h3>
+
+                <p className="text-sm text-[#9CA3AF] leading-[1.65] mt-auto">
+                  {pillar.description}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Bottom Banner with Lifestyle Image */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-12 rounded-2xl overflow-hidden bg-[#121518] border border-[#22C55E]/30 shadow-[0_0_25px_rgba(34,197,94,0.1)] p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6"
+        >
+          <div className="flex items-center gap-4">
+            <img
+              src={CLOUD_CONFIG.images.lifestyle}
+              alt={CLOUD_CONFIG.images.lifestyleAlt}
+              referrerPolicy="no-referrer"
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover border border-[#22C55E]/40 shadow-[0_0_12px_rgba(34,197,94,0.2)] shrink-0 filter contrast-[1.05]"
+              loading="lazy"
+            />
+            <div>
+              <p className="text-xs font-extrabold uppercase tracking-wider text-[#22C55E] flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] shadow-[0_0_6px_#22C55E]" />
+                Presença e Humanização
+              </p>
+              <p className="text-sm sm:text-base font-semibold text-white mt-0.5 max-w-xl">
+                Suporte de verdade via WhatsApp diretamente com sua nutricionista para ajustar refeições no dia a dia.
+              </p>
+            </div>
+          </div>
+          <div className="text-xs text-[#9CA3AF] shrink-0 text-left md:text-right">
+            Disponibilidade contínua • Sem respostas robóticas genéricas
+          </div>
+        </motion.div>
+
+      </div>
+    </section>
+  );
+};
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/ForWhomSection.tsx
+--------------------------------------------------------------------------------
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
+import { ArrowRight, Check, Sparkles } from 'lucide-react';
+import { SITUATIONS } from '../config/cloud';
+
+interface ForWhomProps {
+  onOpenConsultation: () => void;
+}
+
+export const ForWhomSection: React.FC<ForWhomProps> = ({ onOpenConsultation }) => {
+  const [selectedSituations, setSelectedSituations] = useState<Record<string, boolean>>({
+    'sit-1': true,
+    'sit-3': true,
+  });
+
+  const toggleSituation = (id: string) => {
+    setSelectedSituations((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const selectedCount = Object.values(selectedSituations).filter(Boolean).length;
+
+  return (
+    <section id="para-quem" className="py-24 sm:py-32 bg-[#0E1114] text-[#F3F4F6] border-t border-white/5 relative">
+      <div className="max-w-4xl mx-auto px-6 sm:px-8 relative z-10">
+        
+        {/* Section Heading */}
+        <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs font-bold tracking-widest uppercase mb-4 shadow-[0_0_12px_rgba(34,197,94,0.15)]"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Identificação Real</span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.08 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight"
+          >
+            A CLOUD É PARA VOCÊ SE VOCÊ{' '}
+            <span className="text-[#22C55E] drop-shadow-[0_0_20px_rgba(34,197,94,0.3)]">SE IDENTIFICAR COM ISSO:</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.16 }}
+            className="text-sm sm:text-base text-[#9CA3AF] mt-4"
+          >
+            Clique nas frases abaixo que mais refletem a sua relação atual com a dieta:
+          </motion.p>
+        </div>
+
+        {/* Conversational Situations List */}
+        <div className="space-y-4 mb-14">
+          {SITUATIONS.map((item, idx) => {
+            const isSelected = !!selectedSituations[item.id];
+
+            return (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ 
+                  duration: 0.45, 
+                  delay: idx * 0.08,
+                  ease: [0.21, 0.47, 0.32, 0.98] 
+                }}
+                whileHover={{ scale: 1.01 }}
+                onClick={() => toggleSituation(item.id)}
+                className={`group p-5 sm:p-6 rounded-2xl border cursor-pointer transition-all duration-300 flex items-start gap-4 sm:gap-5 ${
+                  isSelected
+                    ? 'bg-[#14181D] border-[#22C55E] shadow-[0_0_25px_rgba(34,197,94,0.18)]'
+                    : 'bg-[#121518] border-white/5 hover:border-white/20'
+                }`}
+              >
+                {/* Checkbox indicator with Neon Glow */}
+                <div
+                  className={`w-6 h-6 rounded-lg border flex items-center justify-center shrink-0 mt-0.5 transition-all duration-200 ${
+                    isSelected
+                      ? 'bg-[#22C55E] border-[#22C55E] text-[#080A0C] shadow-[0_0_12px_#22C55E] scale-110'
+                      : 'border-white/20 bg-transparent group-hover:border-[#22C55E]/50'
+                  }`}
+                >
+                  {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1">
+                  <p
+                    className={`text-base sm:text-lg font-bold leading-snug transition-colors duration-200 ${
+                      isSelected ? 'text-white' : 'text-[#D1D5DB]'
+                    }`}
+                  >
+                    "{item.quote}"
+                  </p>
+                  <p className="text-xs sm:text-sm text-[#9CA3AF] mt-2 leading-relaxed">
+                    {item.context}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* High Conversion Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="rounded-2xl p-8 sm:p-10 bg-gradient-to-br from-[#161B20] to-[#0E1114] border border-[#22C55E]/40 text-center flex flex-col items-center shadow-[0_10px_40px_rgba(0,0,0,0.6),0_0_30px_rgba(34,197,94,0.15)]"
+        >
+          <p className="text-xl sm:text-2xl font-extrabold uppercase text-white tracking-tight mb-3">
+            SE VOCÊ MARCOU AO MENOS UM PONTO,{' '}
+            <span className="text-[#22C55E] drop-shadow-[0_0_18px_rgba(34,197,94,0.35)]">PODEMOS TE AJUDAR HOJE.</span>
+          </p>
+
+          <p className="text-xs sm:text-sm text-[#D1D5DB] max-w-lg mb-8">
+            {selectedCount > 0
+              ? `Você identificou ${selectedCount} ${selectedCount === 1 ? 'dificuldade real' : 'dificuldades reais'}. Chega de sofrer com métodos que não foram feitos para você.`
+              : 'Clique nos itens acima ou converse diretamente conosco no WhatsApp.'}
+          </p>
+
+          <button
+            type="button"
+            id="forwhom-cta"
+            onClick={onOpenConsultation}
+            className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-xs sm:text-sm font-extrabold tracking-wider uppercase text-white bg-[#16A34A] hover:bg-[#22C55E] active:scale-[0.98] shadow-[0_0_25px_rgba(34,197,94,0.4)] hover:shadow-[0_0_35px_rgba(34,197,94,0.7)] transition-all duration-300 cursor-pointer"
+          >
+            <span>QUERO CONVERSAR COM A EQUIPE CLOUD</span>
+            <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
+          </button>
+        </motion.div>
+
+      </div>
+    </section>
+  );
+};
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/ResultsSection.tsx
+--------------------------------------------------------------------------------
+import React from 'react';
+import { motion } from 'motion/react';
+import { Sparkles, CheckCircle } from 'lucide-react';
+import { HOLISTIC_RESULTS, DEMONSTRATIVE_METRICS } from '../config/cloud';
+
+export const ResultsSection: React.FC = () => {
+  return (
+    <section id="resultados" className="py-24 sm:py-32 bg-[#0B0D0F] text-[#F3F4F6] border-t border-white/5 relative">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
+        
+        {/* Section Heading */}
+        <div className="max-w-3xl mb-16 sm:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs font-bold tracking-widest uppercase mb-4 shadow-[0_0_12px_rgba(34,197,94,0.15)]"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Resultados Além da Balança</span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.08 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight"
+          >
+            RESULTADO DE VERDADE É AQUELE QUE{' '}
+            <span className="text-[#22C55E] drop-shadow-[0_0_20px_rgba(34,197,94,0.3)]">VOCÊ MANTÉM PELO RESTO DA VIDA.</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.16 }}
+            className="text-sm sm:text-base text-[#9CA3AF] mt-4 leading-relaxed max-w-2xl"
+          >
+            O peso no espelho é consequência do resgate da sua saúde metabólica, da energia ao acordar
+            e da total ausência de culpa ao comer.
+          </motion.p>
+        </div>
+
+        {/* 6 Holistic Benefit Panels */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 sm:mb-20">
+          {HOLISTIC_RESULTS.map((res, idx) => (
+            <motion.div
+              key={res.title}
+              initial={{ opacity: 0, y: 30, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.21, 0.47, 0.32, 0.98] }}
+              whileHover={{ y: -4 }}
+              className="p-7 rounded-2xl bg-[#121518] border border-white/5 hover:border-[#22C55E]/50 hover:shadow-[0_0_25px_rgba(34,197,94,0.18)] transition-all duration-300 flex flex-col justify-between"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <CheckCircle className="w-5 h-5 text-[#22C55E] shadow-[0_0_8px_rgba(34,197,94,0.4)] shrink-0" />
+                <h3 className="text-base font-bold text-white tracking-tight">
+                  {res.title}
+                </h3>
+              </div>
+              <p className="text-sm text-[#9CA3AF] leading-relaxed">
+                {res.detail}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Demonstrative Metrics */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+          className="pt-12 border-t border-white/10"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8">
+            <span className="text-xs uppercase tracking-widest text-[#22C55E] font-extrabold flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#22C55E] shadow-[0_0_8px_#22C55E]" />
+              Indicadores de Experiência e Consistência
+            </span>
+            <span className="text-[11px] text-[#6B7280] mt-1 sm:mt-0">
+              * Dados demonstrativos da metodologia CLOUD
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {DEMONSTRATIVE_METRICS.map((metric, idx) => (
+              <motion.div
+                key={metric.label}
+                initial={{ opacity: 0, y: 25, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: idx * 0.12 }}
+                className="relative p-6 sm:p-7 rounded-2xl bg-[#121518] border border-white/5 hover:border-[#22C55E]/40 hover:shadow-[0_0_25px_rgba(34,197,94,0.15)] transition-all duration-300"
+              >
+                <div className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-2 font-display">
+                  {metric.value}
+                </div>
+                <div className="text-xs font-bold text-[#22C55E] uppercase tracking-wider mb-2">
+                  {metric.label}
+                </div>
+                <p className="text-xs text-[#9CA3AF] leading-relaxed">
+                  {metric.description}
+                </p>
+
+                <span className="inline-block mt-3 px-2 py-0.5 rounded text-[10px] text-[#9CA3AF] bg-white/5">
+                  Dado demonstrativo
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+      </div>
+    </section>
+  );
+};
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/TestimonialsSection.tsx
+--------------------------------------------------------------------------------
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ChevronLeft, ChevronRight, Quote, Sparkles, Star } from 'lucide-react';
+import { DEMO_TESTIMONIALS } from '../config/cloud';
+
+export const TestimonialsSection: React.FC = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? DEMO_TESTIMONIALS.length - 1 : prev - 1));
+  };
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev === DEMO_TESTIMONIALS.length - 1 ? 0 : prev + 1));
+  };
+
+  const current = DEMO_TESTIMONIALS[currentIndex];
+
+  return (
+    <section id="depoimentos" className="py-24 sm:py-32 bg-[#0E1114] text-[#F3F4F6] border-t border-white/5 relative overflow-hidden">
+      <div className="max-w-5xl mx-auto px-6 sm:px-8 relative z-10">
+        
+        {/* Section Heading */}
+        <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs font-bold tracking-widest uppercase mb-4 shadow-[0_0_12px_rgba(34,197,94,0.15)]"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Relatos & Vivências</span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.08 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight"
+          >
+            O QUE NOSSOS ALUNOS DIZEM QUANDO{' '}
+            <span className="text-[#22C55E] drop-shadow-[0_0_20px_rgba(34,197,94,0.3)]">A DIETA PARA DE DOER.</span>
+          </motion.h2>
+
+          <p className="text-xs text-[#6B7280] mt-3">
+            * Depoimentos demonstrativos para estruturação visual da landing page. Substituir por autorizações reais de clientes.
+          </p>
+        </div>
+
+        {/* Testimonial Stage Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 35, scale: 0.97 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+          className="relative bg-[#121518] rounded-3xl border border-[#22C55E]/30 p-8 sm:p-14 shadow-[0_15px_50px_rgba(0,0,0,0.6),0_0_30px_rgba(34,197,94,0.1)] min-h-[340px] flex flex-col justify-between"
+        >
+          
+          {/* Subtle Quote Icon Watermark */}
+          <div className="absolute top-8 right-8 sm:top-12 sm:right-12 text-[#22C55E]/5 pointer-events-none">
+            <Quote className="w-20 h-20 opacity-40 stroke-[1]" />
+          </div>
+
+          {/* Animated Quote Content */}
+          <div className="relative z-10 my-auto">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current.id}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -14 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+              >
+                {/* 5 Stars + Tag pill */}
+                <div className="flex flex-wrap items-center gap-3 mb-6">
+                  <div className="flex items-center space-x-1 text-[#22C55E] drop-shadow-[0_0_6px_rgba(34,197,94,0.5)]">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] shadow-[0_0_6px_#22C55E]" />
+                    <span>{current.tag}</span>
+                  </div>
+                </div>
+
+                {/* Quote Body */}
+                <blockquote className="text-xl sm:text-2xl md:text-3xl leading-[1.4] text-white font-normal tracking-tight max-w-3xl mb-8">
+                  "{current.quote}"
+                </blockquote>
+
+                {/* Author Info */}
+                <div className="flex items-center gap-4">
+                  <div className="w-11 h-11 rounded-full bg-[#22C55E] text-[#080A0C] font-black text-base flex items-center justify-center shadow-[0_0_15px_#22C55E]">
+                    {current.author.charAt(0)}
+                  </div>
+                  <div>
+                    <cite className="not-italic font-bold text-white block text-base sm:text-lg">
+                      {current.author}
+                    </cite>
+                    <span className="text-xs text-[#9CA3AF]">
+                      {current.role}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Bottom Controls Bar */}
+          <div className="flex items-center justify-between pt-8 mt-8 border-t border-white/10 relative z-10">
+            {/* Direct Tab Selectors */}
+            <div className="flex items-center space-x-2">
+              {DEMO_TESTIMONIALS.map((item, idx) => (
+                <button
+                  key={item.id}
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    idx === currentIndex
+                      ? 'w-8 bg-[#22C55E] shadow-[0_0_10px_#22C55E]'
+                      : 'w-2 bg-white/20 hover:bg-white/40'
+                  }`}
+                  aria-label={`Ver depoimento de ${item.author}`}
+                />
+              ))}
+            </div>
+
+            {/* Prev / Next Arrows */}
+            <div className="flex items-center space-x-2">
+              <button
+                type="button"
+                onClick={prevSlide}
+                className="w-11 h-11 rounded-xl border border-white/10 bg-[#161A1F] flex items-center justify-center text-white hover:bg-[#22C55E] hover:text-[#080A0C] hover:shadow-[0_0_15px_#22C55E] active:scale-95 transition-all cursor-pointer"
+                aria-label="Depoimento anterior"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                type="button"
+                onClick={nextSlide}
+                className="w-11 h-11 rounded-xl border border-white/10 bg-[#161A1F] flex items-center justify-center text-white hover:bg-[#22C55E] hover:text-[#080A0C] hover:shadow-[0_0_15px_#22C55E] active:scale-95 transition-all cursor-pointer"
+                aria-label="Próximo depoimento"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+        </motion.div>
+
+      </div>
+    </section>
+  );
+};
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/FaqSection.tsx
+--------------------------------------------------------------------------------
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Plus, Minus, Sparkles } from 'lucide-react';
+import { FAQ_ITEMS } from '../config/cloud';
+
+export const FaqSection: React.FC = () => {
+  const [openId, setOpenId] = useState<string | null>(FAQ_ITEMS[0].id);
+
+  const toggleItem = (id: string) => {
+    setOpenId((prev) => (prev === id ? null : id));
+  };
+
+  return (
+    <section id="faq" className="py-24 sm:py-32 bg-[#0B0D0F] text-[#F3F4F6] border-t border-white/5 relative">
+      <div className="max-w-4xl mx-auto px-6 sm:px-8 relative z-10">
+        
+        {/* Section Heading */}
+        <div className="text-center max-w-xl mx-auto mb-16 sm:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs font-bold tracking-widest uppercase mb-4 shadow-[0_0_12px_rgba(34,197,94,0.15)]"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Esclarecimentos</span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.08 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-white leading-tight"
+          >
+            PERGUNTAS <span className="text-[#22C55E] drop-shadow-[0_0_20px_rgba(34,197,94,0.3)]">FREQUENTES.</span>
+          </motion.h2>
+
+          <p className="text-sm sm:text-base text-[#9CA3AF] mt-4">
+            Tudo o que você precisa saber sobre o acompanhamento e a metodologia da CLOUD.
+          </p>
+        </div>
+
+        {/* Accordion List */}
+        <div className="space-y-3.5">
+          {FAQ_ITEMS.map((item, idx) => {
+            const isOpen = openId === item.id;
+
+            return (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.06 }}
+                className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                  isOpen
+                    ? 'bg-[#14181D] border-[#22C55E]/50 shadow-[0_0_25px_rgba(34,197,94,0.12)]'
+                    : 'bg-[#121518] border-white/5 hover:border-white/15'
+                }`}
+              >
+                <button
+                  type="button"
+                  id={`faq-trigger-${item.id}`}
+                  onClick={() => toggleItem(item.id)}
+                  aria-expanded={isOpen}
+                  className="w-full py-5 px-6 sm:px-8 text-left flex items-center justify-between gap-4 cursor-pointer focus:outline-none"
+                >
+                  <span className="text-base sm:text-lg font-bold text-white leading-snug">
+                    {item.question}
+                  </span>
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-200 ${
+                      isOpen
+                        ? 'bg-[#22C55E] text-[#080A0C] shadow-[0_0_12px_#22C55E]'
+                        : 'bg-[#1C2126] text-[#9CA3AF]'
+                    }`}
+                  >
+                    {isOpen ? (
+                      <Minus className="w-4 h-4 stroke-[3]" />
+                    ) : (
+                      <Plus className="w-4 h-4 stroke-[3]" />
+                    )}
+                  </div>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      id={`faq-content-${item.id}`}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.28, ease: 'easeInOut' }}
+                    >
+                      <div className="px-6 sm:px-8 pb-6 pt-2 text-sm sm:text-base text-[#D1D5DB] leading-[1.7] border-t border-white/5">
+                        {item.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/FinalCtaSection.tsx
+--------------------------------------------------------------------------------
+import React from 'react';
+import { motion } from 'motion/react';
+import { ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
+import { CLOUD_CONFIG } from '../config/cloud';
+
+interface FinalCtaProps {
+  onOpenConsultation: () => void;
+}
+
+export const FinalCtaSection: React.FC<FinalCtaProps> = ({ onOpenConsultation }) => {
+  return (
+    <section
+      id="contato"
+      className="relative py-28 sm:py-36 bg-[#080A0C] text-[#FAF9F6] overflow-hidden border-t border-white/10"
+    >
+      {/* Dynamic Ambient Mist Animation in Background */}
+      <motion.div
+        animate={{
+          scale: [1, 1.15, 1],
+          opacity: [0.15, 0.25, 0.15],
+        }}
+        transition={{
+          duration: 9,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[450px] rounded-full bg-gradient-to-tr from-[#22C55E]/20 via-[#10B981]/15 to-transparent blur-[140px] -z-0"
+      />
+
+      <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-8 text-center flex flex-col items-center">
+        
+        {/* Urgent Brand Pill with Neon green */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#22C55E]/10 border border-[#22C55E]/40 text-[#22C55E] text-xs font-extrabold tracking-widest uppercase mb-8 shadow-[0_0_15px_rgba(34,197,94,0.2)]"
+        >
+          <span className="w-2 h-2 rounded-full bg-[#22C55E] shadow-[0_0_8px_#22C55E] animate-ping" />
+          <span>Vagas Limitadas para Acompanhamento este Mês</span>
+        </motion.div>
+
+        {/* Compelling Headline */}
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase leading-[1.15] tracking-tight max-w-3xl mb-6 text-white"
+        >
+          CHEGA DE ADIAR A SUA SAÚDE.{' '}
+          <span className="text-[#22C55E] drop-shadow-[0_0_25px_rgba(34,197,94,0.35)] block mt-2">
+            COMECE SUA TRANSFORMAÇÃO HOJE.
+          </span>
+        </motion.h2>
+
+        {/* Supporting Copy */}
+        <motion.p
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="text-sm sm:text-base md:text-lg text-[#D1D5DB] max-w-[54ch] leading-[1.7] mb-10 font-normal"
+        >
+          Seu próximo passo não é cortar mais alimentos nem sofrer na frente do prato.{' '}
+          <strong className="text-white font-semibold">É ter uma estratégia personalizada com apoio diário.</strong>
+        </motion.p>
+
+        {/* High-Impact Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
+        >
+          <button
+            type="button"
+            id="final-cta-start-button"
+            onClick={onOpenConsultation}
+            className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-5 rounded-xl text-xs sm:text-sm font-extrabold tracking-wider uppercase text-white bg-[#16A34A] hover:bg-[#22C55E] shadow-[0_0_25px_rgba(34,197,94,0.4)] hover:shadow-[0_0_35px_rgba(34,197,94,0.7)] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+          >
+            <span>QUERO COMEÇAR AGORA</span>
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </button>
+
+          {/* Direct WhatsApp Quick Link */}
+          <a
+            href={CLOUD_CONFIG.contact.whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            id="final-cta-whatsapp-link"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-5 rounded-xl text-xs sm:text-sm font-bold tracking-wider uppercase text-white bg-[#121518] hover:bg-[#181D22] border border-white/10 hover:border-[#22C55E]/40 hover:text-[#22C55E] transition-all duration-200"
+          >
+            <MessageCircle className="w-4 h-4 text-[#22C55E]" />
+            <span>Falar no WhatsApp</span>
+          </a>
+        </motion.div>
+
+        {/* Reassurance text */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-xs text-[#9CA3AF]">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
+            Atendimento 100% individual
+          </span>
+          <span>•</span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
+            Sem robôs ou dietas de gaveta
+          </span>
+          <span>•</span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
+            Acompanhamento contínuo
+          </span>
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/Footer.tsx
+--------------------------------------------------------------------------------
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
+import { 
+  ShieldCheck, 
+  Lock, 
+  Award, 
+  ArrowUp, 
+  MessageCircle, 
+  Instagram, 
+  Mail, 
+  Clock, 
+  CheckCircle2, 
+  ArrowRight,
+  Sparkles,
+  HeartPulse
+} from 'lucide-react';
+import { CLOUD_CONFIG } from '../config/cloud';
+
+interface FooterProps {
+  onOpenConsultation: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenConsultation }) => {
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterSuccess, setNewsletterSuccess] = useState(false);
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const el = document.querySelector(href);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail || !newsletterEmail.includes('@')) return;
+    setNewsletterSuccess(true);
+    setTimeout(() => {
+      setNewsletterEmail('');
+    }, 4000);
+  };
+
+  return (
+    <footer id="main-footer" className="bg-[#050608] text-[#9CA3AF] pt-20 pb-12 border-t border-white/10 relative overflow-hidden">
+      {/* Subtle Ambient Glow */}
+      <div 
+        aria-hidden="true" 
+        className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[#22C55E]/5 blur-[160px] -z-0"
+      />
+
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
+        
+        {/* Top Trust Pillars Banner */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-16 border-b border-white/10"
+        >
+          <div className="flex items-start gap-3.5 p-4 rounded-xl bg-[#0D1013] border border-white/5 hover:border-[#22C55E]/30 transition-all">
+            <div className="w-10 h-10 rounded-lg bg-[#22C55E]/10 border border-[#22C55E]/30 flex items-center justify-center text-[#22C55E] shrink-0 shadow-[0_0_12px_rgba(34,197,94,0.15)]">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-white">Registro Profissional</h4>
+              <p className="text-xs text-[#9CA3AF] mt-0.5 leading-relaxed">Em conformidade com CFN e CRN-3 para atendimento clínico e online.</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3.5 p-4 rounded-xl bg-[#0D1013] border border-white/5 hover:border-[#22C55E]/30 transition-all">
+            <div className="w-10 h-10 rounded-lg bg-[#22C55E]/10 border border-[#22C55E]/30 flex items-center justify-center text-[#22C55E] shrink-0 shadow-[0_0_12px_rgba(34,197,94,0.15)]">
+              <Award className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-white">Base Científica</h4>
+              <p className="text-xs text-[#9CA3AF] mt-0.5 leading-relaxed">Condutas pautadas em literatura médica, sem modismos ou terrorismo.</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3.5 p-4 rounded-xl bg-[#0D1013] border border-white/5 hover:border-[#22C55E]/30 transition-all">
+            <div className="w-10 h-10 rounded-lg bg-[#22C55E]/10 border border-[#22C55E]/30 flex items-center justify-center text-[#22C55E] shrink-0 shadow-[0_0_12px_rgba(34,197,94,0.15)]">
+              <Lock className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-white">Sigilo e LGPD</h4>
+              <p className="text-xs text-[#9CA3AF] mt-0.5 leading-relaxed">Prontuários e dados de saúde com criptografia e privacidade total.</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3.5 p-4 rounded-xl bg-[#0D1013] border border-white/5 hover:border-[#22C55E]/30 transition-all">
+            <div className="w-10 h-10 rounded-lg bg-[#22C55E]/10 border border-[#22C55E]/30 flex items-center justify-center text-[#22C55E] shrink-0 shadow-[0_0_12px_rgba(34,197,94,0.15)]">
+              <HeartPulse className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-white">Atendimento Global</h4>
+              <p className="text-xs text-[#9CA3AF] mt-0.5 leading-relaxed">Consultas por teleatendimento no Brasil e para residentes no exterior.</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Main 4-Column Directory */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 py-16 border-b border-white/10">
+          
+          {/* Col 1: Institutional & Brand (5 Cols) */}
+          <div className="lg:col-span-4 flex flex-col items-start text-left">
+            <a
+              href="#"
+              onClick={(e) => { e.preventDefault(); scrollToTop(); }}
+              className="inline-flex items-center gap-2 text-white font-black text-2xl tracking-[0.25em] group"
+              aria-label="CLOUD Home"
+            >
+              <span className="group-hover:text-[#22C55E] transition-colors">CLOUD</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-[#22C55E] shadow-[0_0_10px_#22C55E]" />
+            </a>
+
+            <div className="mt-2 inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-[10px] font-extrabold uppercase tracking-widest">
+              Nutrição Clínica & Comportamental
+            </div>
+
+            <p className="text-xs text-[#9CA3AF] mt-4 leading-relaxed max-w-sm">
+              Metodologia contemporânea que une ciência da nutrição, bioquímica metabólica e acompanhamento humano contínuo. Sem cardápios engessados, sem culpa e com resultados que perduram pela vida toda.
+            </p>
+
+            <div className="mt-6 flex items-center gap-3">
+              <a
+                href={CLOUD_CONFIG.contact.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram da CLOUD"
+                className="w-9 h-9 rounded-xl bg-[#121518] border border-white/10 flex items-center justify-center text-[#9CA3AF] hover:text-[#22C55E] hover:border-[#22C55E]/50 hover:shadow-[0_0_12px_rgba(34,197,94,0.2)] transition-all"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href={CLOUD_CONFIG.contact.whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp da CLOUD"
+                className="w-9 h-9 rounded-xl bg-[#121518] border border-white/10 flex items-center justify-center text-[#9CA3AF] hover:text-[#22C55E] hover:border-[#22C55E]/50 hover:shadow-[0_0_12px_rgba(34,197,94,0.2)] transition-all"
+              >
+                <MessageCircle className="w-4 h-4" />
+              </a>
+              <a
+                href="mailto:contato@cloudnutricao.com.br"
+                aria-label="E-mail da CLOUD"
+                className="w-9 h-9 rounded-xl bg-[#121518] border border-white/10 flex items-center justify-center text-[#9CA3AF] hover:text-[#22C55E] hover:border-[#22C55E]/50 hover:shadow-[0_0_12px_rgba(34,197,94,0.2)] transition-all"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+
+          {/* Col 2: Navigation Links (2.5 Cols) */}
+          <div className="lg:col-span-2 sm:col-span-1 text-left">
+            <h5 className="text-xs font-bold uppercase tracking-widest text-white mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
+              Navegação
+            </h5>
+            <ul className="space-y-2.5 text-xs font-medium">
+              <li>
+                <a
+                  href="#hero-section"
+                  onClick={(e) => { e.preventDefault(); scrollToTop(); }}
+                  className="hover:text-[#22C55E] transition-colors inline-block py-0.5"
+                >
+                  Início
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#quebrar-objecao"
+                  onClick={(e) => scrollToSection(e, '#quebrar-objecao')}
+                  className="hover:text-[#22C55E] transition-colors inline-block py-0.5"
+                >
+                  Além da Balança
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#metodo"
+                  onClick={(e) => scrollToSection(e, '#metodo')}
+                  className="hover:text-[#22C55E] transition-colors inline-block py-0.5"
+                >
+                  O Método (4 Etapas)
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#experiencia"
+                  onClick={(e) => scrollToSection(e, '#experiencia')}
+                  className="hover:text-[#22C55E] transition-colors inline-block py-0.5"
+                >
+                  A Experiência (6 Pilares)
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#para-quem"
+                  onClick={(e) => scrollToSection(e, '#para-quem')}
+                  className="hover:text-[#22C55E] transition-colors inline-block py-0.5"
+                >
+                  Para Quem É
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#resultados"
+                  onClick={(e) => scrollToSection(e, '#resultados')}
+                  className="hover:text-[#22C55E] transition-colors inline-block py-0.5"
+                >
+                  Resultados & Casos
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#depoimentos"
+                  onClick={(e) => scrollToSection(e, '#depoimentos')}
+                  className="hover:text-[#22C55E] transition-colors inline-block py-0.5"
+                >
+                  Depoimentos Reais
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#faq"
+                  onClick={(e) => scrollToSection(e, '#faq')}
+                  className="hover:text-[#22C55E] transition-colors inline-block py-0.5"
+                >
+                  Dúvidas Frequentes
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 3: Focus & Services (2.5 Cols) */}
+          <div className="lg:col-span-3 sm:col-span-1 text-left">
+            <h5 className="text-xs font-bold uppercase tracking-widest text-white mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
+              Áreas de Atuação
+            </h5>
+            <ul className="space-y-2.5 text-xs font-medium text-[#9CA3AF]">
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
+                <span>Emagrecimento Saudável e Sustentável</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
+                <span>Reeducação Alimentar sem Terrorismo</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
+                <span>Hipertrofia e Desempenho Esportivo</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
+                <span>Saúde Intestinal, Microbiota & Inflamação</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
+                <span>Exames Bioquímicos e Suplementação Fiel</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
+                <span>Acompanhamento Contínuo via WhatsApp</span>
+              </li>
+            </ul>
+
+            <div className="mt-6 pt-5 border-t border-white/5">
+              <div className="flex items-center gap-2 text-xs text-[#9CA3AF]">
+                <Clock className="w-3.5 h-3.5 text-[#22C55E] shrink-0" />
+                <span>Seg a Sex: 08h às 20h | Sáb: 08h às 13h</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Col 4: Newsletter & Priority Channel (3 Cols) */}
+          <div className="lg:col-span-3 text-left">
+            <h5 className="text-xs font-bold uppercase tracking-widest text-white mb-4 flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#22C55E]" />
+              Nutrição Descomplicada
+            </h5>
+            <p className="text-xs text-[#9CA3AF] leading-relaxed mb-4">
+              Receba orientações práticas de alimentação, receitas fáceis e desmistificação científica diretamente no seu e-mail:
+            </p>
+
+            {newsletterSuccess ? (
+              <div className="p-3 rounded-xl bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(34,197,94,0.15)]">
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
+                <span>Inscrição confirmada! Boas-vindas à comunidade.</span>
+              </div>
+            ) : (
+              <form onSubmit={handleNewsletterSubmit} className="space-y-2">
+                <div className="relative">
+                  <input
+                    type="email"
+                    required
+                    placeholder="Seu melhor e-mail"
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0E1114] border border-[#242A31] text-xs text-white placeholder-[#6B7280] focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E] transition-all"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-[#080A0C] bg-[#22C55E] hover:bg-[#4ADE80] transition-colors shadow-[0_0_15px_rgba(34,197,94,0.3)] flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <span>Receber Dicas Sem Custo</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </form>
+            )}
+
+            {/* Direct Consultation Action */}
+            <div className="mt-6 pt-5 border-t border-white/5">
+              <button
+                type="button"
+                onClick={onOpenConsultation}
+                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-white bg-[#14181D] hover:bg-[#1A2027] border border-[#22C55E]/30 hover:border-[#22C55E] transition-all flex items-center justify-center gap-2 cursor-pointer group"
+              >
+                <span className="group-hover:text-[#22C55E] transition-colors">Agendar Consulta</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#22C55E] group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Medical & Legal Disclaimer Banner (Essential for Healthcare Compliance) */}
+        <div className="py-6 border-b border-white/5 text-[11px] text-[#6B7280] leading-relaxed text-left">
+          <p>
+            <strong className="text-white/80 uppercase font-semibold mr-1">Aviso Médico & Nutricional Obrigatório:</strong>
+            As informações disponibilizadas neste portal possuem caráter estritamente educativo, informativo e de divulgação científica. Não substituem o diagnóstico, acompanhamento, conduta ou prescrição médica e nutricional individualizada após anamnese clínica completa. Cada organismo possui particularidades genéticas, metabólicas e rotinas distintas. Para alterações significativas na sua dieta, consulte sempre um nutricionista habilitado.
+          </p>
+        </div>
+
+        {/* Sub-Footer: Copyright, Ethics, Legal links and Back-to-Top */}
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-[#6B7280]">
+          
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-2 sm:gap-4 text-center sm:text-left">
+            <p>© {new Date().getFullYear()} CLOUD Nutrição Integrada. Todos os direitos reservados.</p>
+            <span className="hidden sm:inline text-white/10">•</span>
+            <p className="text-[#9CA3AF]">
+              Responsável Técnico: <span className="text-white/80 font-medium">Nutricionista Clínica • CRN-3 / CFN Vigente</span>
+            </p>
+          </div>
+
+          {/* Quick Legal & Back to Top */}
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4 text-[11px]">
+              <a href="#faq" onClick={(e) => scrollToSection(e, '#faq')} className="hover:text-[#22C55E] transition-colors">Termos</a>
+              <a href="#faq" onClick={(e) => scrollToSection(e, '#faq')} className="hover:text-[#22C55E] transition-colors">Privacidade</a>
+              <a href="#faq" onClick={(e) => scrollToSection(e, '#faq')} className="hover:text-[#22C55E] transition-colors">Código de Ética</a>
+            </div>
+
+            {/* Back to Top Button with Neon Glow */}
+            <button
+              type="button"
+              onClick={scrollToTop}
+              aria-label="Voltar ao início da página"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#121518] hover:bg-[#181D22] border border-white/10 hover:border-[#22C55E]/50 text-white text-xs font-semibold hover:text-[#22C55E] transition-all cursor-pointer group shadow-sm hover:shadow-[0_0_12px_rgba(34,197,94,0.25)]"
+            >
+              <span>Topo</span>
+              <ArrowUp className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-y-0.5" />
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </footer>
+  );
+};
+
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: src/components/ContactModal.tsx
+--------------------------------------------------------------------------------
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { X, ArrowRight, MessageCircle, CheckCircle2 } from 'lucide-react';
+import { CLOUD_CONFIG } from '../config/cloud';
+
+interface ContactModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const GOALS = [
+  'Emagrecer de verdade sem passar fome',
+  'Quebrar o ciclo do efeito sanfona',
+  'Rotina corrida e falta de organização no prato',
+  'Mais disposição, energia e saúde preventiva',
+];
+
+export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [selectedGoal, setSelectedGoal] = useState(GOALS[0]);
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = '';
+      setSubmitted(false);
+    }
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+
+    const encodedMsg = encodeURIComponent(
+      `Olá! Quero transformar minha alimentação com a CLOUD.\nNome: ${name || 'Interessado(a)'}\nWhatsApp: ${phone}\nPrincipal foco: "${selectedGoal}"\nGostaria de verificar as vagas para acompanhamento.`
+    );
+    
+    setTimeout(() => {
+      const waUrl = `https://wa.me/${CLOUD_CONFIG.contact.whatsappNumber}?text=${encodedMsg}`;
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    }, 1200);
+  };
+
+  const handleDirectWhatsApp = () => {
+    window.open(CLOUD_CONFIG.contact.whatsappLink, '_blank', 'noopener,noreferrer');
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/80 backdrop-blur-md"
+          />
+
+          {/* Dialog Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: 16 }}
+            transition={{ duration: 0.28, ease: 'easeOut' }}
+            className="relative w-full max-w-lg rounded-3xl bg-[#121518] border border-[#22C55E]/30 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_30px_rgba(34,197,94,0.1)] p-7 sm:p-9 z-10 my-auto text-left text-white"
+          >
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute top-6 right-6 p-2 rounded-xl text-[#9CA3AF] hover:text-white hover:bg-white/10 transition-colors"
+              aria-label="Fechar"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {!submitted ? (
+              <>
+                <div className="mb-6">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs font-bold uppercase tracking-wider mb-3 shadow-[0_0_10px_rgba(34,197,94,0.15)]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] shadow-[0_0_6px_#22C55E]" />
+                    <span>Início do Acompanhamento</span>
+                  </div>
+                  <h3 className="text-2xl font-extrabold uppercase tracking-tight text-white">
+                    SUA TRANSFORMAÇÃO COMEÇA AQUI.{' '}
+                    <span className="text-[#22C55E] drop-shadow-[0_0_15px_rgba(34,197,94,0.3)]">SEM DIETAS DE GAVETA.</span>
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#9CA3AF] mt-2 leading-relaxed">
+                    Preencha seus dados para receber os valores, horários e iniciar seu atendimento direto no WhatsApp.
+                  </p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Name Input */}
+                  <div>
+                    <label
+                      htmlFor="contact-name"
+                      className="block text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5"
+                    >
+                      Seu Nome Completo
+                    </label>
+                    <input
+                      id="contact-name"
+                      type="text"
+                      required
+                      placeholder="Como podemos te chamar?"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-[#080A0C] border border-[#2B323A] text-sm text-white placeholder-[#6B7280] focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E] transition-colors"
+                    />
+                  </div>
+
+                  {/* Phone / WhatsApp */}
+                  <div>
+                    <label
+                      htmlFor="contact-phone"
+                      className="block text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-1.5"
+                    >
+                      WhatsApp com DDD
+                    </label>
+                    <input
+                      id="contact-phone"
+                      type="tel"
+                      required
+                      placeholder="(11) 99999-9999"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-[#080A0C] border border-[#2B323A] text-sm text-white placeholder-[#6B7280] focus:outline-none focus:border-[#22C55E] focus:ring-1 focus:ring-[#22C55E] transition-colors"
+                    />
+                  </div>
+
+                  {/* Main Goal Selection */}
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#9CA3AF] mb-2">
+                      Qual é o seu principal objetivo agora?
+                    </label>
+                    <div className="space-y-2">
+                      {GOALS.map((goal) => (
+                        <label
+                          key={goal}
+                          className={`flex items-center gap-3 p-3 rounded-xl border text-xs sm:text-sm cursor-pointer transition-all ${
+                            selectedGoal === goal
+                              ? 'bg-[#14181D] border-[#22C55E] text-white font-medium shadow-[0_0_12px_rgba(34,197,94,0.15)]'
+                              : 'bg-[#080A0C] border-white/5 text-[#9CA3AF] hover:border-white/20'
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="goal"
+                            checked={selectedGoal === goal}
+                            onChange={() => setSelectedGoal(goal)}
+                            className="accent-[#22C55E] focus:ring-0"
+                          />
+                          <span>{goal}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="pt-2 space-y-2.5">
+                    <button
+                      type="submit"
+                      id="submit-consultation-btn"
+                      className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl text-xs sm:text-sm font-extrabold tracking-wider uppercase text-white bg-[#16A34A] hover:bg-[#22C55E] shadow-[0_0_25px_rgba(34,197,94,0.4)] hover:shadow-[0_0_35px_rgba(34,197,94,0.7)] active:scale-[0.99] transition-all cursor-pointer"
+                    >
+                      <span>Continuar no WhatsApp</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleDirectWhatsApp}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-medium text-[#9CA3AF] hover:text-[#22C55E] transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 text-[#22C55E]" />
+                      <span>Prefiro abrir mensagem direta agora</span>
+                    </button>
+                  </div>
+                </form>
+              </>
+            ) : (
+              /* Success State */
+              <div className="text-center py-8">
+                <div className="w-14 h-14 rounded-full bg-[#22C55E]/20 text-[#22C55E] flex items-center justify-center mx-auto mb-4 border border-[#22C55E]/40 shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+                  <CheckCircle2 className="w-8 h-8" />
+                </div>
+                <h4 className="text-2xl font-bold text-white mb-2 uppercase">
+                  Redirecionando para o WhatsApp...
+                </h4>
+                <p className="text-sm text-[#9CA3AF] max-w-sm mx-auto mb-6">
+                  Estamos abrindo seu canal exclusivo com a equipe CLOUD com seus dados já preparados.
+                </p>
+                <div className="w-6 h-6 border-2 border-[#22C55E] border-t-transparent rounded-full animate-spin mx-auto shadow-[0_0_10px_#22C55E]" />
+              </div>
+            )}
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+
+
